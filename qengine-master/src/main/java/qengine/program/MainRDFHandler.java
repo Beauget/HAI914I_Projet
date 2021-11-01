@@ -3,6 +3,7 @@ package qengine.program;
 import java.util.ArrayList;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
+import qengine.program.Triplet;
 
 
 
@@ -17,15 +18,23 @@ import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
  * </p>
  */
 public final class MainRDFHandler extends AbstractRDFHandler {
-	ArrayList<Pair> dictionnary = new ArrayList<Pair>();
+	static ArrayList<Pair> dictionnary = new ArrayList<Pair>();
+	
+	static Index SPO = new Index("SPO");
+	static Index SOP = new Index("SOP");
+	static Index PSO = new Index("PSO");
+	static Index POS = new Index("POS");
+	static Index OSP = new Index("OSP");
+	static Index OPS = new Index("OPS");
+	
 	int compteur = 1;
-	@SuppressWarnings("deprecation")
 	@Override
 	public void handleStatement(Statement st) {
-		System.out.println("\n" + st.getSubject() + "\t " + st.getPredicate() + "\t " + st.getObject());
+		//System.out.println("\n" + st.getSubject() + "\t " + st.getPredicate() + "\t " + st.getObject());
 		boolean subject = false;
 		boolean predicate = false;
 		boolean object = false;
+		Triplet toAdd = new Triplet(0,0,0);
 		for(Pair p : dictionnary) {
 			
 			if(p.isSameValue(st.getSubject().toString())) {
@@ -41,20 +50,42 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 			}
 		}
 		
-		if(!subject) {
-			dictionnary.add(new Pair(compteur,st.getSubject().toString()));
-			compteur++;
-		}
-		if(!predicate) {
-			dictionnary.add(new Pair(compteur,st.getPredicate().getLocalName()));
-			compteur++;
-		}
-		if(!object) {
-			dictionnary.add(new Pair(compteur,st.getObject().toString()));
-			compteur++;
-		}
-		System.out.println(dictionnary.toString());
+			
+			if(!subject) {
+				dictionnary.add(new Pair(compteur,st.getSubject().toString()));
+				toAdd.indexing[0] = compteur;
+				compteur++;
+			}
+			if(!predicate) {
+				dictionnary.add(new Pair(compteur,st.getPredicate().getLocalName()));
+				toAdd.indexing[1] = compteur;
+				compteur++;
+			}
+			if(!object) {
+				dictionnary.add(new Pair(compteur,st.getObject().toString()));
+				toAdd.indexing[2] = compteur;
+				compteur++;
+			}
+			
+			SPO.addTriplet(toAdd);
+			
+		
+
 	};
+	
+	
+	
+	static public void seeDictionnary(ArrayList<Pair> dictionnary) {
+		for(Pair p : dictionnary) {
+			System.out.print(p.toString());
+		}
+	}
+	
+	static public  void seeIndex() {
+		for(Triplet t : SPO.getIndex()) {
+			System.out.println(t.indexing[0] + " | " +  t.indexing[1] + " | " +  t.indexing[2]);
+		}
+	}
 	
 	
 }

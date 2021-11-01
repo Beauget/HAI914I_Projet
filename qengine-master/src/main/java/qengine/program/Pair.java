@@ -23,7 +23,7 @@ public class Pair{
 	}
 
 	 public String toString() {
-		 return("Key : " + this.getKey()+" : "+this.getValue() + "\n");
+		 return("Key : " + this.getKey()+ "\n" +  "Value : "+this.getValue() + "\n");
 	 }
 	 
 }

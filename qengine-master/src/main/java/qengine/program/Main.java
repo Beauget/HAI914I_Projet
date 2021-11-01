@@ -62,11 +62,11 @@ final class Main {
 	public static void processAQuery(ParsedQuery query) {
 		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
 
-		System.out.println("first pattern : " + patterns.get(0));
+	/*	System.out.println("first pattern : " + patterns.get(0));
 
 		System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
 
-		System.out.println("variables to project : ");
+		System.out.println("variables to project : ");*/
 
 		// Utilisation d'une classe anonyme
 		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
@@ -83,6 +83,9 @@ final class Main {
 	public static void main(String[] args) throws Exception {
 		parseData();
 		parseQueries();
+		
+		MainRDFHandler.seeDictionnary(MainRDFHandler.dictionnary);
+		MainRDFHandler.seeIndex();
 	}
 
 	// ========================================================================
@@ -133,12 +136,16 @@ final class Main {
 		try (Reader dataReader = new FileReader(dataFile)) {
 			// On va parser des données au format ntriples
 			RDFParser rdfParser = Rio.createParser(RDFFormat.NTRIPLES);
-
+			
 			// On utilise notre implémentation de handler
 			rdfParser.setRDFHandler(new MainRDFHandler());
 
 			// Parsing et traitement de chaque triple par le handler
 			rdfParser.parse(dataReader, baseURI);
+			
+		
+			
+			
 		}
 	}
 }
