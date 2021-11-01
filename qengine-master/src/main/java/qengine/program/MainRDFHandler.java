@@ -67,9 +67,15 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 				compteur++;
 			}
 			
-			SPO.addTriplet(toAdd);
 			
-		
+			SPO.addTriplet(toAdd);
+			SOP.addTriplet(toAdd);
+			PSO.addTriplet(toAdd);
+			POS.addTriplet(toAdd);
+			OSP.addTriplet(toAdd);
+			OPS.addTriplet(toAdd);
+			
+
 
 	};
 	
@@ -81,8 +87,8 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 		}
 	}
 	
-	static public  void seeIndex() {
-		for(Triplet t : SPO.getIndex()) {
+	static public  void seeIndex(Index toSee) {
+		for(Triplet t : toSee.getIndex()) {
 			System.out.println(t.indexing[0] + " | " +  t.indexing[1] + " | " +  t.indexing[2]);
 		}
 	}

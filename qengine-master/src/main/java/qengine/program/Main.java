@@ -85,7 +85,9 @@ final class Main {
 		parseQueries();
 		
 		MainRDFHandler.seeDictionnary(MainRDFHandler.dictionnary);
-		MainRDFHandler.seeIndex();
+		MainRDFHandler.seeIndex(MainRDFHandler.SPO);
+		System.out.println("---------------- FIN INDEX ----------------");
+		MainRDFHandler.seeIndex(MainRDFHandler.SOP);
 	}
 
 	// ========================================================================
