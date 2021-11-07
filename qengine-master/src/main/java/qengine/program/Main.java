@@ -85,9 +85,20 @@ final class Main {
 		parseQueries();
 		
 		MainRDFHandler.seeDictionnary(MainRDFHandler.dictionnary);
-		MainRDFHandler.seeIndex(MainRDFHandler.SPO);
+		System.out.println(MainRDFHandler.SPO.toString());
 		System.out.println("---------------- FIN INDEX ----------------");
-		MainRDFHandler.seeIndex(MainRDFHandler.SOP);
+		System.out.println(MainRDFHandler.SOP.toString());
+		System.out.println("---------------- FIN INDEX ----------------");
+		System.out.println(MainRDFHandler.PSO.toString());
+		System.out.println("---------------- FIN INDEX ----------------");
+		System.out.println(MainRDFHandler.POS.toString());
+		System.out.println("---------------- FIN INDEX ----------------");
+		System.out.println(MainRDFHandler.OSP.toString());
+		System.out.println("---------------- FIN INDEX ----------------");
+		System.out.println(MainRDFHandler.OPS.toString());
+		System.out.println("---------------- FIN INDEX ----------------");
+
+
 	}
 
 	// ========================================================================

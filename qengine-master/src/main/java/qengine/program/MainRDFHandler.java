@@ -20,6 +20,8 @@ import qengine.program.Triplet;
 public final class MainRDFHandler extends AbstractRDFHandler {
 	static ArrayList<Pair> dictionnary = new ArrayList<Pair>();
 	
+
+	
 	static Index SPO = new Index("SPO");
 	static Index SOP = new Index("SOP");
 	static Index PSO = new Index("PSO");
@@ -30,7 +32,6 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 	int compteur = 1;
 	@Override
 	public void handleStatement(Statement st) {
-		//System.out.println("\n" + st.getSubject() + "\t " + st.getPredicate() + "\t " + st.getObject());
 		boolean subject = false;
 		boolean predicate = false;
 		boolean object = false;
@@ -67,31 +68,27 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 				compteur++;
 			}
 			
-			
+
 			SPO.addTriplet(toAdd);
 			SOP.addTriplet(toAdd);
 			PSO.addTriplet(toAdd);
 			POS.addTriplet(toAdd);
 			OSP.addTriplet(toAdd);
 			OPS.addTriplet(toAdd);
-			
 
 
 	};
 	
 	
 	
-	static public void seeDictionnary(ArrayList<Pair> dictionnary) {
+	 public static void seeDictionnary(ArrayList<Pair> dictionnary) {
 		for(Pair p : dictionnary) {
 			System.out.print(p.toString());
 		}
 	}
 	
-	static public  void seeIndex(Index toSee) {
-		for(Triplet t : toSee.getIndex()) {
-			System.out.println(t.indexing[0] + " | " +  t.indexing[1] + " | " +  t.indexing[2]);
-		}
-	}
+	
+	
 	
 	
 }
