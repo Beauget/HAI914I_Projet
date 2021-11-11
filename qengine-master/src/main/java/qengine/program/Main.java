@@ -47,12 +47,12 @@ final class Main {
 	/**
 	 * Fichier contenant les requêtes sparql
 	 */
-	static final String queryFile = workingDir + "sample_query.queryset";
+	static final String queryFile = workingDir + "STAR_ALL_workload.queryset";
 
 	/**
 	 * Fichier contenant des données rdf
 	 */
-	static final String dataFile = workingDir + "sample_data.nt";
+	static final String dataFile = workingDir + "100K.nt";
 
 	// ========================================================================
 
@@ -84,19 +84,15 @@ final class Main {
 		parseData();
 		parseQueries();
 		
-		MainRDFHandler.seeDictionnary(MainRDFHandler.dictionnary);
-		System.out.println(MainRDFHandler.SPO.toString());
-		System.out.println("---------------- FIN INDEX ----------------");
-		System.out.println(MainRDFHandler.SOP.toString());
-		System.out.println("---------------- FIN INDEX ----------------");
-		System.out.println(MainRDFHandler.PSO.toString());
-		System.out.println("---------------- FIN INDEX ----------------");
-		System.out.println(MainRDFHandler.POS.toString());
-		System.out.println("---------------- FIN INDEX ----------------");
-		System.out.println(MainRDFHandler.OSP.toString());
-		System.out.println("---------------- FIN INDEX ----------------");
-		System.out.println(MainRDFHandler.OPS.toString());
-		System.out.println("---------------- FIN INDEX ----------------");
+
+		MainRDFHandler.writeDictionnary(MainRDFHandler.dictionnary);
+		MainRDFHandler.writeIndex(MainRDFHandler.SPO);
+		MainRDFHandler.writeIndex(MainRDFHandler.SOP);
+		MainRDFHandler.writeIndex(MainRDFHandler.PSO);
+		MainRDFHandler.writeIndex(MainRDFHandler.POS);
+		MainRDFHandler.writeIndex(MainRDFHandler.OSP);
+		MainRDFHandler.writeIndex(MainRDFHandler.OPS);
+
 
 
 	}

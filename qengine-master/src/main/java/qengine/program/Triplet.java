@@ -14,5 +14,10 @@ public class Triplet {
 		return indexing;
 	}
 	
+	
+	public String toString() {
+		String s =  indexing[0] + " " + indexing[1] + " " + indexing[2] + " " + "\n";
+		return s;
+	}
 
 }

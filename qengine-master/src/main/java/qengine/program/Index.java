@@ -41,14 +41,14 @@ public class Index {
 		Triplet addTo = new Triplet(toAdd.indexing[0], toAdd.indexing[1], toAdd.indexing[2]);
 		switch(toSwitch) {
 		case "SPO" : 
-			System.out.println("SPO INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+			//System.out.println("SPO INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
 			this.getIndex().add(addTo);
 			break;
 		case "SOP" : 
 			tempSwitch = addTo.indexing[1];
 			addTo.indexing[1] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-			System.out.println("SOP INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+			//System.out.println("SOP INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
 			this.index.add(addTo);
 			break;
 		case "PSO" :
@@ -57,7 +57,7 @@ public class Index {
 			addTo.indexing[1] = tempSwitch;
 			
 
-			System.out.println("PSO INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+			//System.out.println("PSO INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
 			this.index.add(addTo);
 			break;
 		case "POS" :
@@ -68,7 +68,7 @@ public class Index {
 			tempSwitch = addTo.indexing[0];
 			addTo.indexing[0] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-			System.out.println("POS INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+			//System.out.println("POS INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
 			this.index.add(addTo);
 			break;
 		case "OSP" :			
@@ -80,7 +80,7 @@ public class Index {
 			tempSwitch = addTo.indexing[1];
 			addTo.indexing[1] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-			System.out.println("OSP INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+		//	System.out.println("OSP INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
 			this.index.add(addTo);
 			break;
 		case "OPS" :
@@ -89,7 +89,7 @@ public class Index {
 			addTo.indexing[2] = tempSwitch;
 			
 			this.index.add(addTo);
-			System.out.println("OPS INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+			//System.out.println("OPS INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
 			break;
 		default:
 			System.out.println("Default switch case");
