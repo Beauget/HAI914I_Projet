@@ -72,7 +72,7 @@ final class Main {
 		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
 
 			public void meet(Projection projection) {
-				System.out.println(projection.getProjectionElemList().getElements());
+				//System.out.println(projection.getProjectionElemList().getElements());
 			}
 		});
 	}
@@ -81,10 +81,13 @@ final class Main {
 	 * EntrÃ©e du programme
 	 */
 	public static void main(String[] args) throws Exception {
+		
+		System.out.println("Execution de parseData() et parseQueries()...");
 		parseData();
 		parseQueries();
 		
-
+		
+		System.out.println("Début écriture dans le dossier /output des résultats...");
 		MainRDFHandler.writeDictionnary(MainRDFHandler.dictionnary);
 		MainRDFHandler.writeIndex(MainRDFHandler.SPO);
 		MainRDFHandler.writeIndex(MainRDFHandler.SOP);
@@ -93,7 +96,7 @@ final class Main {
 		MainRDFHandler.writeIndex(MainRDFHandler.OSP);
 		MainRDFHandler.writeIndex(MainRDFHandler.OPS);
 
-
+		System.out.println("Dictionnaire et Index écrit dans le dossier /output");
 
 	}
 
