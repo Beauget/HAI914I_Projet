@@ -95,6 +95,9 @@ final class Main {
 		MainRDFHandler.writeIndex(MainRDFHandler.POS);
 		MainRDFHandler.writeIndex(MainRDFHandler.OSP);
 		MainRDFHandler.writeIndex(MainRDFHandler.OPS);
+		
+		System.out.println(MainRDFHandler.SPOHM.toString());
+
 
 		System.out.println("Dictionnaire et Index �crit dans le dossier /output");
 
