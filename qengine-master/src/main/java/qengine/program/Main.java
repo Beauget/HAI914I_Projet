@@ -6,12 +6,14 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
 import org.eclipse.rdf4j.query.algebra.Projection;
 import org.eclipse.rdf4j.query.algebra.StatementPattern;
+import org.eclipse.rdf4j.query.algebra.Var;
 import org.eclipse.rdf4j.query.algebra.helpers.AbstractQueryModelVisitor;
 import org.eclipse.rdf4j.query.algebra.helpers.StatementPatternCollector;
 import org.eclipse.rdf4j.query.parser.ParsedQuery;
@@ -47,7 +49,7 @@ final class Main {
 	/**
 	 * Fichier contenant les requêtes sparql
 	 */
-	static final String queryFile = workingDir + "STAR_ALL_workload.queryset";
+	static final String queryFile = workingDir + "sample_query.queryset";
 
 	/**
 	 * Fichier contenant des données rdf
@@ -61,13 +63,21 @@ final class Main {
 	 */
 	public static void processAQuery(ParsedQuery query) {
 		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
-	/*	System.out.println("\n\n");
+		/*
 		System.out.println("first pattern : " + patterns.get(0));
-
 		System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
 
-		System.out.println("variables to project : ");
-*/
+		System.out.println("variables to project : ");*/
+		
+		ArrayList<String> output = new ArrayList<String>();
+		for(Var var : patterns.get(0).getVarList()) {
+			if(var.getValue()==null)
+				output.add("x");
+			else
+				output.add(var.getValue().toString());
+		}
+		System.out.println(output.toString());
+
 		// Utilisation d'une classe anonyme
 		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
 
@@ -91,6 +101,7 @@ final class Main {
 		//System.out.println(MainRDFHandler.seeHashMapDictionnary());
 		//System.out.println(MainRDFHandler.SPOHM.toString());
 		//MainRDFHandler.seeDictionnary2(MainRDFHandler.dictionnary);
+		/*
 		MainRDFHandler.writeDictionnary(MainRDFHandler.dictionnary);
 		MainRDFHandler.writeIndex(MainRDFHandler.SPO);
 		MainRDFHandler.writeIndex(MainRDFHandler.SOP);
@@ -98,6 +109,7 @@ final class Main {
 		MainRDFHandler.writeIndex(MainRDFHandler.POS);
 		MainRDFHandler.writeIndex(MainRDFHandler.OSP);
 		MainRDFHandler.writeIndex(MainRDFHandler.OPS);
+		*/
 
 		System.out.println("Dictionnaire et Index �crit dans le dossier /output");
 

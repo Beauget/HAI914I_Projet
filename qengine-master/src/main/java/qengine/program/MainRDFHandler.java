@@ -60,7 +60,7 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 	@Override
 	public void handleStatement(Statement st) {
 		//avec un dictionnaire Pair et une index arrayList<Triplet>
-		classicMain(st);
+		//classicMain(st);
 		//avec un dictionnaire HashMap<Iteger,String> et une index Hashmap<Integer,arrayList<Triplet>>
 		//hashMapMain(st);
 	};
