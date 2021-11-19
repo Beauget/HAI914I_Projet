@@ -54,8 +54,8 @@ final class Main {
 	/**
 	 * Fichier contenant des données rdf
 	 */
-	static final String dataFile = workingDir + "100K.nt";
-
+	static final String dataFile = workingDir + "sample_data.nt";
+	//static final String dataFile = workingDir + "100K.nt";
 	// ========================================================================
 
 	/**
@@ -91,15 +91,10 @@ final class Main {
 	 * Entrée du programme
 	 */
 	public static void main(String[] args) throws Exception {
-		
-		System.out.println("Execution de parseData() et parseQueries()...");
 		parseData();
-		parseQueries();
-		
-		
 		System.out.println("D�but �criture dans le dossier /output des r�sultats...");
-		//System.out.println(MainRDFHandler.seeHashMapDictionnary());
-		//System.out.println(MainRDFHandler.SPOHM.toString());
+		System.out.println(MainRDFHandler.seeHashMapDictionnary());
+		System.out.println(MainRDFHandler.SPOHM.toString());
 		//MainRDFHandler.seeDictionnary2(MainRDFHandler.dictionnary);
 		/*
 		MainRDFHandler.writeDictionnary(MainRDFHandler.dictionnary);
@@ -112,6 +107,9 @@ final class Main {
 		*/
 
 		System.out.println("Dictionnaire et Index �crit dans le dossier /output");
+		System.out.println("Execution de parseData() et parseQueries()...");
+		
+		parseQueries();
 
 	}
 

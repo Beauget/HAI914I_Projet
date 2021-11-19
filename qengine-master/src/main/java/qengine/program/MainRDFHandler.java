@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.eclipse.rdf4j.model.Statement;
@@ -62,7 +63,7 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 		//avec un dictionnaire Pair et une index arrayList<Triplet>
 		//classicMain(st);
 		//avec un dictionnaire HashMap<Iteger,String> et une index Hashmap<Integer,arrayList<Triplet>>
-		//hashMapMain(st);
+		hashMapMain(st);
 	};
 	
 	
@@ -185,70 +186,71 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 			POS.addTriplet(toAdd);
 			OSP.addTriplet(toAdd);
 			OPS.addTriplet(toAdd);
-		
 	}
 	
 	private void hashMapMain(Statement st){
 			boolean subject = false;
 			boolean predicate = false;
 			boolean object = false;
-			Triplet toAdd = new Triplet(0,0,0);
+			Integer [] toAdd = {0,0,0};			
 			int i = 0;
 			int subjectIndex = 0 , predicateIndex= 0, objectIndex = 0;
 
 			 Iterator it = dictionnaryHashMap.entrySet().iterator();
-
+			 
 			 while (it.hasNext()) {
+				 
 				 HashMap.Entry dic = (Entry) it.next();
-				 String p = (String) ((Entry) dic).getValue();
-				 if(p.equals(st.getSubject().toString())) {
+				 String value = (String) ((Entry) dic).getValue();
+				 Integer key = (Integer) ((Entry) dic).getKey();
+				 
+				 if(value.equals(st.getSubject().toString())) {
 						subject = true;
-						subjectIndex=i;
+						subjectIndex= key;
 					}
 					
-					if(p.equals(st.getPredicate().getLocalName())) {
+					if(value.equals(st.getPredicate().getLocalName())) {
 						predicate = true;
-						predicateIndex = i;
+						predicateIndex = key;
 					}
 					
-					if(p.equals(st.getObject().toString())) {
+					if(value.equals(st.getObject().toString())) {
 						object = true;
-						objectIndex = i;
+						objectIndex = key;
 					}
-					i++;
 			 }	
 			
 				
 				if(!subject) {
+					compteurHm = dictionnaryHashMap.size()+1;
 					dictionnaryHashMap.put(compteurHm, st.getSubject().toString());
-					toAdd.indexing[0] = compteurHm;
-					compteurHm++;
+					toAdd[0] = compteurHm;
 				}
 				else
-					toAdd.indexing[0] = subjectIndex;
+					toAdd[0] = subjectIndex;
 				if(!predicate) {
+					compteurHm = dictionnaryHashMap.size()+1;
 					dictionnaryHashMap.put(compteurHm,st.getPredicate().getLocalName());
-					toAdd.indexing[1] = compteurHm;
-					compteurHm++;
+					toAdd[1] = compteurHm;
 
 				}
 				else
-					toAdd.indexing[1] = predicateIndex;
+					toAdd[1] = predicateIndex;
 				if(!object) {
+					compteurHm = dictionnaryHashMap.size()+1;
 					dictionnaryHashMap.put(compteurHm,st.getObject().toString());
-					toAdd.indexing[2] = compteurHm;
-					compteurHm++;
+					toAdd[2]= compteurHm;
 				}
 				else
-					toAdd.indexing[2] = objectIndex;
-				
+					toAdd[2]= objectIndex;
 
-				SPOHM.addTriplet(toAdd);
-				SOPHM.addTriplet(toAdd);
-				PSOHM.addTriplet(toAdd);
-				POSHM.addTriplet(toAdd);
-				OSPHM.addTriplet(toAdd);
-				OPSHM.addTriplet(toAdd);
+				SPOHM.add(toAdd);
+				SOPHM.add(toAdd);
+				PSOHM.add(toAdd);
+				POSHM.add(toAdd);
+				OSPHM.add(toAdd);
+				OPSHM.add(toAdd);
+
 	}
 	
 	
