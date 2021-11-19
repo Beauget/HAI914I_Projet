@@ -28,8 +28,10 @@ import static java.nio.file.StandardOpenOption.*;
 
 public final class MainRDFHandler extends AbstractRDFHandler {
 	
-	static final String outputDictionnary = "C:\\Users\\beaug\\Desktop\\M2\\M2\\NoSQL\\projet\\HAI914I_Projet\\qengine-master\\output\\dictionnary.txt";
-	static final String outputIndex = "C:\\Users\\beaug\\Desktop\\M2\\M2\\NoSQL\\projet\\HAI914I_Projet\\qengine-master\\output\\";
+	//static final String outputDictionnary = "C:\\Users\\beaug\\Desktop\\M2\\M2\\NoSQL\\projet\\HAI914I_Projet\\qengine-master\\output\\dictionnary.txt";
+	//static final String outputIndex = "C:\\Users\\beaug\\Desktop\\M2\\M2\\NoSQL\\projet\\HAI914I_Projet\\qengine-master\\output\\";
+	static final String outputDictionnary = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/dictionnary.txt";
+	static final String outputIndex = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
 	static ArrayList<Pair> dictionnary = new ArrayList<Pair>();
 	
 
@@ -110,27 +112,35 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 			System.out.print(p.toString());
 		}
 	}
+	 public static String toStringDictionnary() {
+		 StringBuilder builder = new StringBuilder();
+		for(Pair p : dictionnary) {
+			builder.append(p.toString()+"\n");
+		}
+		return builder.toString();
+	}
 	 
 	public static void writeDictionnary(ArrayList<Pair> dictionnary) {
 		FileWriter fw = null;
+		//seeDictionnary(dictionnary);
 		try {
 			fw = new FileWriter(outputDictionnary);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		}  
+		try {
+			fw.write(toStringDictionnary());
+			fw.close();
+		} catch (IOException e) {
+		// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	       for (Pair s : dictionnary) {    	   
-	    	      try {
-					fw.write(s.toString());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	       }
+	       
 	   }
 	
 	
-	public static void writeIndex(Index toWrite) {
+	public static void writeIndex(Index toWrite) throws IOException {
 		String path = outputIndex + toWrite.getOrder() + ".txt";
 		FileWriter fw = null;
 		try {
@@ -147,6 +157,12 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 					e.printStackTrace();
 				}
 	    	    }
+ 	      try {
+				fw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 	    	  }
 	}
 	
