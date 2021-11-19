@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class IndexWithHashMap {
+
+// Index represent 1 type of index SPO,OPS.. 
+public class IndexOpti {
+	
 	
 	private String order;
-	private HashMap<Integer,Triplet> index;
+	private HashMap<Integer,ArrayList<Triplet>> index;
 	
-	public IndexWithHashMap(String orderIndex) {
+	public IndexOpti(String orderIndex) {
 		order = orderIndex;
-		index = new HashMap<Integer,Triplet>();
+		index = new HashMap<Integer,ArrayList<Triplet>>();
 	}
 	
 	
@@ -19,15 +22,27 @@ public class IndexWithHashMap {
 		return order;
 	}
 	
-
 	
-	
-	public HashMap<Integer,Triplet> getIndex() {
+	public HashMap<Integer,ArrayList<Triplet>> getIndex() {
 		return this.index;
 	}
 	
-	public void setIndex(HashMap<Integer,Triplet> index) {
+	public void setIndex(HashMap<Integer,ArrayList<Triplet>> index) {
 		this.index = index;
+	}
+	
+	public void addTripletWithKey(Integer i,Triplet triplet) {
+		//verifie si une value existe déja pour la key 
+		ArrayList<Triplet> currentArray = index.get(i);
+		if (currentArray==null){
+			currentArray = new ArrayList<Triplet>();
+			currentArray.add(triplet);
+			index.put(i, currentArray);
+		}
+		else {
+			currentArray.add(triplet);
+			index.put(i, currentArray);
+		}
 	}
 
 
@@ -40,24 +55,19 @@ public class IndexWithHashMap {
 		Triplet addTo = new Triplet(toAdd.indexing[0], toAdd.indexing[1], toAdd.indexing[2]);
 		switch(toSwitch) {
 		case "SPO" : 
-			//System.out.println("SPO INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
-			this.index.put(addTo.indexing[0], addTo);
+			addTripletWithKey(toAdd.indexing[0],toAdd);
 			break;
 		case "SOP" : 
 			tempSwitch = addTo.indexing[1];
 			addTo.indexing[1] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-			//System.out.println("SOP INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
-			this.index.put(addTo.indexing[0],addTo);
+			addTripletWithKey(toAdd.indexing[0],toAdd);
 			break;
 		case "PSO" :
 			tempSwitch = addTo.indexing[0];
 			addTo.indexing[0] = addTo.indexing[1];
 			addTo.indexing[1] = tempSwitch;
-			
-
-			//System.out.println("PSO INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
-			this.index.put(addTo.indexing[0],addTo);
+			addTripletWithKey(toAdd.indexing[0],toAdd);
 			break;
 		case "POS" :
 			tempSwitch = addTo.indexing[1];
@@ -67,8 +77,7 @@ public class IndexWithHashMap {
 			tempSwitch = addTo.indexing[0];
 			addTo.indexing[0] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-			//System.out.println("POS INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
-			this.index.put(addTo.indexing[0],addTo);
+			addTripletWithKey(toAdd.indexing[0],toAdd);
 			break;
 		case "OSP" :			
 
@@ -79,15 +88,14 @@ public class IndexWithHashMap {
 			tempSwitch = addTo.indexing[1];
 			addTo.indexing[1] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-		//	System.out.println("OSP INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
-			this.index.put(addTo.indexing[0],addTo);
+			addTripletWithKey(toAdd.indexing[0],toAdd);
 			break;
 		case "OPS" :
 			tempSwitch = addTo.indexing[0];
 			addTo.indexing[0] = addTo.indexing[2];
 			addTo.indexing[2] = tempSwitch;
-			this.index.put(addTo.indexing[0],addTo);
-			//System.out.println("OPS INDEXING : " + addTo.indexing[0] + " | " +  addTo.indexing[1] + " | " +  addTo.indexing[2]);
+			
+			addTripletWithKey(toAdd.indexing[0],toAdd);
 			break;
 		default:
 			System.out.println("Default switch case");
@@ -97,15 +105,14 @@ public class IndexWithHashMap {
 	
 	 public String toString() {
 		 System.out.println("Je suis bien l'index : " + this.getOrder());
-		 String toSee = "";
-		 Iterator it = this.getIndex().entrySet().iterator();
-		 while(it.hasNext()) {
-			// System.out.println(it.next().toString());
-			// toSee += it.next().[0] + " | " +  t.indexing[1] + " | " +  t.indexing[2] + "\n";
-		 }
-			return toSee;
+		 Iterator it = index.entrySet().iterator();
+		 StringBuilder builder = new StringBuilder();
+		 while (it.hasNext()) {
+			 HashMap.Entry pair = (HashMap.Entry)it.next();
+			 builder.append(pair.getKey() + " = " + pair.getValue().toString()+"\n");
+		 }		 
+		 return builder.toString();
 		}
 
 	
-
 }

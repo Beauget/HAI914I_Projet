@@ -61,13 +61,13 @@ final class Main {
 	 */
 	public static void processAQuery(ParsedQuery query) {
 		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
-
-	/*	System.out.println("first pattern : " + patterns.get(0));
+	/*	System.out.println("\n\n");
+		System.out.println("first pattern : " + patterns.get(0));
 
 		System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
 
-		System.out.println("variables to project : ");*/
-
+		System.out.println("variables to project : ");
+*/
 		// Utilisation d'une classe anonyme
 		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
 
@@ -88,7 +88,9 @@ final class Main {
 		
 		
 		System.out.println("D�but �criture dans le dossier /output des r�sultats...");
-		MainRDFHandler.seeDictionnary(MainRDFHandler.dictionnary);
+		//System.out.println(MainRDFHandler.seeHashMapDictionnary());
+		//System.out.println(MainRDFHandler.SPOHM.toString());
+		//MainRDFHandler.seeDictionnary2(MainRDFHandler.dictionnary);
 		MainRDFHandler.writeDictionnary(MainRDFHandler.dictionnary);
 		MainRDFHandler.writeIndex(MainRDFHandler.SPO);
 		MainRDFHandler.writeIndex(MainRDFHandler.SOP);
