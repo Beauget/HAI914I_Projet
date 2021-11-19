@@ -52,7 +52,7 @@ final class Main {
 	/**
 	 * Fichier contenant des données rdf
 	 */
-	static final String dataFile = workingDir + "sample_data.nt";
+	static final String dataFile = workingDir + "100K.nt";
 
 	// ========================================================================
 
@@ -88,6 +88,7 @@ final class Main {
 		
 		
 		System.out.println("D�but �criture dans le dossier /output des r�sultats...");
+		MainRDFHandler.seeDictionnary(MainRDFHandler.dictionnary);
 		MainRDFHandler.writeDictionnary(MainRDFHandler.dictionnary);
 		MainRDFHandler.writeIndex(MainRDFHandler.SPO);
 		MainRDFHandler.writeIndex(MainRDFHandler.SOP);
@@ -95,9 +96,6 @@ final class Main {
 		MainRDFHandler.writeIndex(MainRDFHandler.POS);
 		MainRDFHandler.writeIndex(MainRDFHandler.OSP);
 		MainRDFHandler.writeIndex(MainRDFHandler.OPS);
-		
-		System.out.println(MainRDFHandler.SPOHM.toString());
-
 
 		System.out.println("Dictionnaire et Index �crit dans le dossier /output");
 
@@ -149,7 +147,6 @@ final class Main {
 	private static void parseData() throws FileNotFoundException, IOException {
 
 		try (Reader dataReader = new FileReader(dataFile)) {
-
 			// On va parser des données au format ntriples
 			RDFParser rdfParser = Rio.createParser(RDFFormat.NTRIPLES);
 			
@@ -157,7 +154,11 @@ final class Main {
 			rdfParser.setRDFHandler(new MainRDFHandler());
 
 			// Parsing et traitement de chaque triple par le handler
-			rdfParser.parse(dataReader, baseURI);	
+			rdfParser.parse(dataReader, baseURI);
+			
+		
+			
+			
 		}
 	}
 }
