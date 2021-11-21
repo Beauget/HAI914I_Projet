@@ -1,5 +1,4 @@
-package qengine.program;
-
+package qengine.program.models;
 
 // Triplet = 1,2,3 order give by index
 public class Triplet {

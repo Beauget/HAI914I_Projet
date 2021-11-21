@@ -1,4 +1,4 @@
-package qengine.program;
+package qengine.program.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,15 +6,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import qengine.program.abstract_models.Index;
+
 
 // Index represent 1 type of index SPO,OPS.. 
-public class IndexOpti {
+public class IndexOld extends Index{
 	
 	
 	private String order;
 	private HashMap<Integer,HashMap<Integer,List<Integer>>> index;
 	
-	public IndexOpti(String orderIndex) {
+	public IndexOld(String orderIndex) {
+		super(orderIndex);
 		order = orderIndex;
 		index = new HashMap<Integer,HashMap<Integer,List<Integer>>>();
 	}

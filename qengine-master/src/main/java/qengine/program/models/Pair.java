@@ -1,4 +1,4 @@
-package qengine.program;
+package qengine.program.models;
 
 
 public class Pair{

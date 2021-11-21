@@ -1,4 +1,4 @@
-package qengine.program;
+package qengine.program.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;

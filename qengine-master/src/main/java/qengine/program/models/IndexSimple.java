@@ -1,16 +1,22 @@
-package qengine.program;
+package qengine.program.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import qengine.program.abstract_models.Index;
 
 
 // Index represent 1 type of index SPO,OPS.. 
-public class Index {
+public class IndexSimple extends Index {
 	
 	
 	private String order;
 	private ArrayList<Triplet> index;
 	
-	public Index(String orderIndex) {
+	public IndexSimple(String orderIndex) {
+		super (orderIndex);
 		order = orderIndex;
 		index = new ArrayList<Triplet>();
 	}
@@ -35,7 +41,8 @@ public class Index {
 	
 
 	
-	public void addTriplet(Triplet toAdd) {	
+	public void add(Integer first,Integer second,Integer third) {	
+		Triplet toAdd = new Triplet(first, second, third);
 		String toSwitch = this.getOrder();
 		int tempSwitch = 0;
 		Triplet addTo = new Triplet(toAdd.indexing[0], toAdd.indexing[1], toAdd.indexing[2]);
@@ -98,13 +105,11 @@ public class Index {
 	}
 	
 	 public String toString() {
-		 System.out.println("Je suis bien l'index : " + this.getOrder());
-		 String toSee = "";
+		 StringBuilder builder = new StringBuilder();
 			for(Triplet t : this.getIndex()) {
-				toSee += t.indexing[0] + " | " +  t.indexing[1] + " | " +  t.indexing[2] + "\n";
+				builder.append(t.indexing[0] + " | " +  t.indexing[1] + " | " +  t.indexing[2] + "\n");
 			}
-			return toSee;
+			return builder.toString();
 		}
-
 	
 }
