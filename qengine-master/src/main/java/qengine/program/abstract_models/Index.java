@@ -3,7 +3,7 @@ package qengine.program.abstract_models;
 import java.util.ArrayList;
 import java.util.List;
 
-import qengine.program.models.Triplet;
+import deprecated.Triplet;
 
 public class Index {
 	public   String getOrder() {

@@ -13,6 +13,8 @@ import qengine.program.abstract_models.Index;
 public class IndexOpti extends Index{
 	
 	
+	static double execIndex = 0;
+	
 	private   String order;
 	private   HashMap<Integer,HashMap<Integer,List<Integer>>> index;
 	
@@ -37,6 +39,7 @@ public class IndexOpti extends Index{
 	}
 	
 	public   void add(Integer first,Integer second,Integer third) {
+		double start = System.currentTimeMillis();
 		//verifie si la premier hashmap existe
 		HashMap<Integer,List<Integer>> secondHashMap = index.get(first);
 		//si la premiere hash n'existe pas je l'ajoute
@@ -59,6 +62,15 @@ public class IndexOpti extends Index{
 			index.put(first, secondHashMap);
 		}
 		
+		double end = System.currentTimeMillis();
+		
+		execIndex += ((end - start) / 1000);
+		
+	}
+	
+	
+	public static double getExecIndex() {
+		return execIndex;
 	}
 
 	public   List<Integer> getAnswer(Integer first,Integer second) {

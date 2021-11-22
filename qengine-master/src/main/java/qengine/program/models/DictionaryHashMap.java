@@ -12,6 +12,7 @@ import qengine.program.abstract_models.Dictionary;
 public class DictionaryHashMap extends Dictionary {
 	
 	static HashMap<Integer,String> dictionary= new HashMap<Integer,String>();
+	static double execDictionnary = 0;
 	
 	public DictionaryHashMap(){
 		super();
@@ -23,6 +24,7 @@ public class DictionaryHashMap extends Dictionary {
 	}
 	
 	public Integer[] updateDictionary(Statement st) {
+		double start = System.currentTimeMillis();
 		boolean subject = false;
 		boolean predicate = false;
 		boolean object = false;
@@ -76,7 +78,8 @@ public class DictionaryHashMap extends Dictionary {
 			}
 			else
 				toAdd[2]= objectIndex;
-			
+			double end = System.currentTimeMillis();
+			execDictionnary += ((end - start) / 1000);
 			return toAdd;
 	}
 	public Integer getKey(String s) {
@@ -88,6 +91,10 @@ public class DictionaryHashMap extends Dictionary {
 
 		}
 	 return null;
+	}
+	
+	public static double getTimeDictionnary() {
+		return execDictionnary;
 	}
 	
 	public String getValue(Integer i) {

@@ -17,12 +17,16 @@ public class Processor {
 	static ArrayList<Index> indexes;
 	static ArrayList<Query> queries;
 	
+	static double execQuery = 0;
+	static double execQueryWrite = 0;
+	
 	public Processor(Dictionary d, ArrayList<Index> idx, ArrayList<Query> q){
 		this.dictionary = d;
 		this.indexes = idx;
 		this.queries = q;
 	}
-	public static String doQueries(){
+	public String doQueries(){
+		double start = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder();
 		for(Query q : queries) {
 			builder.append("QUERY : "+q.toString()+"\n");
@@ -34,8 +38,18 @@ public class Processor {
 				builder.append("Combinaison impossible"+"\n\n");
 			}
 				
-		}		
+		}
+		double end = System.currentTimeMillis();
+		execQuery += ((end - start) / 1000);
 		return builder.toString();
+	}
+	
+	public static double getExecQuery() {
+		return execQuery;
+	}
+	
+	public static double getExecQueryWrite() {
+		return execQueryWrite;
 	}
 	
 	private static List<String> doAQuery(Query query) {
@@ -57,11 +71,11 @@ public class Processor {
 					return answer;
 				}
 			}
-			System.out.println("Processor : doQueryInIntegers : toute les variables existe mais combinaison impossible"+"\n");
+			//System.out.println("Processor : doQueryInIntegers : toute les variables existe mais combinaison impossible"+"\n");
 		}
 		else {
-			System.out.println(q.toString());
-			System.out.println("Processor : doQueryInIntegers : Cette requete comporte des objets qui n'existe pas dans le dictionnaire"+"\n");
+			//System.out.println(q.toString());
+			//System.out.println("Processor : doQueryInIntegers : Cette requete comporte des objets qui n'existe pas dans le dictionnaire"+"\n");
 			}
 		return null;
 	}
@@ -94,7 +108,8 @@ public class Processor {
 		return output;
 	}
 	
-	public static void writeAnswers(String path) throws IOException {
+	public void writeAnswers(String path) throws IOException {
+		double start = System.currentTimeMillis();
 		String pathToFile = path + "Answers" + ".txt";
 		FileWriter fw = null;
 		try {
@@ -109,5 +124,8 @@ public class Processor {
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-		}	
+		double end = System.currentTimeMillis();
+		execQueryWrite += ((end - start) / 1000);
+		}
+	
 }

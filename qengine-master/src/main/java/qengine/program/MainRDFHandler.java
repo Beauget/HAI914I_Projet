@@ -16,14 +16,13 @@ import java.util.Map.Entry;
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
 
+import deprecated.IndexSimple;
+import deprecated.Pair;
+import deprecated.Triplet;
 import qengine.program.abstract_models.Dictionary;
 import qengine.program.abstract_models.Index;
 import qengine.program.models.DictionaryHashMap;
-import qengine.program.models.IndexOld;
 import qengine.program.models.IndexOpti;
-import qengine.program.models.IndexSimple;
-import qengine.program.models.Pair;
-import qengine.program.models.Triplet;
 
 import static java.nio.file.StandardOpenOption.*;
 
@@ -42,10 +41,13 @@ import static java.nio.file.StandardOpenOption.*;
 
 public final class MainRDFHandler extends AbstractRDFHandler {
 	
-	//static final String outputDictionnary = "/home/dnspc/Desktop/M2/NoSQL/ProjetMoodle/qengine-master/output/dictionnary.txt";
-	//static final String outputIndex = "/home/dnspc/Desktop/M2/NoSQL/ProjetMoodle/qengine-master/output/";
-	static final String outputDictionnary = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/dictionnary.txt";
-	static final String outputIndex = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
+	static final String outputDictionnary = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/dictionnary.txt";
+	static final String outputIndex = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
+	//static final String outputDictionnary = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/dictionnary.txt";
+	//static final String outputIndex = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
+	
+	
+	
 
 	static Dictionary dictionary = new DictionaryHashMap();	
 	static Index SPO = new IndexOpti("SPO");
@@ -54,6 +56,9 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 	static Index POS = new IndexOpti("POS");
 	static Index OSP = new IndexOpti("OSP");
 	static Index OPS = new IndexOpti("OPS");
+
+	
+	
 	
 	@Override
 	public void handleStatement(Statement st) {
@@ -126,7 +131,7 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 
 		return indexes;
 	}
-	public void add(Integer s,Integer p,Integer o , Index idx) {	
+	public void add(Integer s,Integer p,Integer o , Index idx) {
 		String toSwitch = idx.getOrder();
 		switch(toSwitch) {
 		case "SPO" : 

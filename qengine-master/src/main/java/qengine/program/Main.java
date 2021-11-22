@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import org.eclipse.rdf4j.query.algebra.Projection;
@@ -22,10 +23,12 @@ import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 
+import deprecated.Triplet;
 import qengine.program.abstract_models.Dictionary;
 import qengine.program.abstract_models.Index;
+import qengine.program.models.DictionaryHashMap;
+import qengine.program.models.IndexOpti;
 import qengine.program.models.Query;
-import qengine.program.models.Triplet;
 import qengine.program.processor.Processor;
 
 /**
@@ -64,17 +67,117 @@ final class Main {
 	//static final String dataFile = workingDir + "sample_data.nt";
 	static final String dataFile = workingDir + "100K.nt";
 	// ========================================================================
+	
+	static final String outputPath = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
 
 	/**
 	 * Entrée du programme
 	 */
 	public static void main(String[] args) throws Exception {
+		
+		// user menu
+		
+		int cmd = 999;
+		StringBuilder builderBase = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
+		Scanner sc = new Scanner(System.in);
+		builderBase.append("--- Bienvenue dans notre moteur de requête RDF --- \n");
+		System.out.println(builderBase.toString());
+		builder.append("Options disponible (taper le chiffre correspondant à l'option) : \n" );
+		builder.append("\n1 : Création du .csv contenant tout les résultats de l'application");
+		builder.append("\n2 : Création du dictionnaire et temps d'éxecution (SANS ECRITURE /output)");
+		builder.append("\n3 : Création du dictionnaire et temps d'éxecution (AVEC ECRITURE /output)");
+		builder.append("\n4 : Création des indexs et temps d'exécution (SANS ECRITURE /output)");
+		builder.append("\n5 : Création des indexs et temps d'exécution (AVEC ECRITURE /output)");
+		builder.append("\n6 : Chargement + exécution des requêtes et temps d'exécution (SANS ECRITURE /output)");
+		builder.append("\n7 : Chargement + exécution des requêtes et temps d'exécution (AVEC ECRITURE /output)");
+		builder.append("\n8 : Toute les données des options précédentes (SANS ECRITURE)");
+		builder.append("\n0 : Quittez l'application");
+		while(cmd != 0) {
+			System.out.println(builder.toString());
+			cmd = sc.nextInt();
+			
+			switch(cmd) {
+			
+			case 1 : 
+				System.out.println("generation du csv ...");
+				break;
+			case 2 : 
+				System.out.println("dictionnaire en cours...");
+				parseData();
+				System.out.println("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " secondes");
+				break;
+			case 3 : 
+				System.out.println("dictionnaire ecriture en cours..");
+				parseData();
+				double start = System.currentTimeMillis();
+				MainRDFHandler.writeDictionnary();
+				double end = System.currentTimeMillis();
+				double writeTime = DictionaryHashMap.getTimeDictionnary() + ((end - start) / 1000);
+				System.out.println("Temps de création du dictionnaire (AVEC ECRITURE dans /ouput " + writeTime + " secondes");
+				break;
+			case 4 : 
+				System.out.println("index en cours");
+				parseData();
+				System.out.println("Temps de création des 6 index (SANS ECRITURE et sans prise en compte du temps de création du dictionnaire) " + IndexOpti.getExecIndex() + " secondes");
+				break;
+			case 5 : 
+				System.out.println("index et écriture en cours");
+				parseData();
+				double startIndex = System.currentTimeMillis();
+				MainRDFHandler.writeIndex();
+				double endIndex = System.currentTimeMillis();
+				double writeTimeIndex = IndexOpti.getExecIndex() + ((endIndex - startIndex ) / 1000);
+				System.out.println("Temps de création des 6 index (AVEC ECRITURE dans /output et \n sans prise en compte du temps de création du dictionnaire) " + writeTimeIndex + " secondes \n");
+				break;
+			case 6 : 
+				System.out.println("requête en cours");
+				parseData();
+				ArrayList<Query> queries = parseQueries();
+				Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
+				processor.doQueries();
+				System.out.print("Temps de création et d'exécution des requêtes (SANS ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + Processor.getExecQuery() + " secondes \n");
+				break;
+			case 7 : 
+				System.out.println("requête + écriture en cours");
+				System.out.println("requête en cours");
+				parseData();
+				ArrayList<Query> queries2 = parseQueries();
+				Processor processor2 = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries2);
+				processor2.writeAnswers(outputPath);
+				System.out.println("Temps de création et d'exécution des requêtes (AVEC ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + Processor.getExecQueryWrite() + " secondes \n");
+				break;
+			case 8 : 
+				StringBuilder allToSee = new StringBuilder();
+				double startAll = System.currentTimeMillis();
+				parseData();
+				ArrayList<Query> queriesAll = parseQueries();
+				Processor processorAll = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesAll);
+				processorAll.doQueries();
+				double endAll = System.currentTimeMillis();
+				allToSee.append("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " secondes \n");
+				allToSee.append("Temps de création des index (SANS ECRITURE) " + IndexOpti.getExecIndex() + " secondes \n");
+				allToSee.append("Temps de création et d'exécution des requêtes (SANS ECRITURE) " + Processor.getExecQuery() + " secondes \n");
+				double totalTime = ((endAll - startAll) / 1000);
+				
+				allToSee.append("Temps d'exécution total de l'application : " + totalTime + " secondes");				
+				System.out.println(allToSee.toString());
+				break;
+			case 0 : 
+				System.out.println("Merci de votre visite, bonne journée !");
+			default : 
+				System.out.println("Mauvaise entrée clavier");
+			}			
+		}
+		
+		
+		
 		parseData();
 		System.out.println("Execution de parseData()...");
 		System.out.println("D�but �criture dans le dossier /output des r�sultats...");
 
 		MainRDFHandler.writeIndex();
-		MainRDFHandler.writeDictionnary();
+		
 		
 		System.out.println("Dictionnaire et Index �crit dans le dossier /output");
 		
@@ -84,7 +187,7 @@ final class Main {
 		Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
 		
 		System.out.println("Traitement des query et écriture...");
-		String outputPath = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
+		//String outputPath = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
 		processor.writeAnswers(outputPath);
 		
 		System.out.println("Fini !!! ");
