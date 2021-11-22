@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import org.eclipse.rdf4j.model.Statement;
 import org.eclipse.rdf4j.rio.helpers.AbstractRDFHandler;
@@ -41,14 +42,14 @@ import static java.nio.file.StandardOpenOption.*;
 
 public final class MainRDFHandler extends AbstractRDFHandler {
 	
-	static final String outputDictionnary = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/dictionnary.txt";
-	static final String outputIndex = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
+	static final String outputDictionnary = "/home/dnspc/Desktop/M2/NoSQL/ProjetSSH/HAI914I_Projet/qengine-master/output/dictionnary.txt";
+	static final String outputIndex = "/home/dnspc/Desktop/M2/NoSQL/ProjetSSH/HAI914I_Projet/qengine-master/output/";
 	//static final String outputDictionnary = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/dictionnary.txt";
 	//static final String outputIndex = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
 	
 	
 	
-
+	
 	static Dictionary dictionary = new DictionaryHashMap();	
 	static Index SPO = new IndexOpti("SPO");
 	static Index SOP = new IndexOpti("SOP");
@@ -57,11 +58,13 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 	static Index OSP = new IndexOpti("OSP");
 	static Index OPS = new IndexOpti("OPS");
 
+	static int nbTriplet = 0;
 	
 	
 	
 	@Override
 	public void handleStatement(Statement st) {
+		nbTriplet++;
 		//avec un dictionnaire HashMap<Iteger,String> et une index Hashmap<Integer,arrayList<Triplet>>
 		Integer[] toAdd = dictionary.updateDictionary(st);
 		//System.out.println(toAdd[0] +" "+toAdd[1]+" "+toAdd[2]);
@@ -157,6 +160,32 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 			break;
 		}
 	}
+	
+	
+	public static void writeToCSV(ArrayList<String> addToCSV) {
+		String toWrite = "nomDuFichierDonnee,nomDuFichierRequete,NombreDeTriplet,NombreDeRequete,TempsDeLectureDonnee,TempsDeLectureRequete,TempsDeCreationDico,NombreIndex,TempsCreationIndex,TempsTotalEval,TempsTotal\n";
+		String path = outputIndex + "leRESULTAT" + ".csv";
+		for(String s : addToCSV) {
+			toWrite+= s+",";
+		}
+		toWrite = toWrite.substring(0,toWrite.length()-1);
+		FileWriter fw = null;
+
+			try {
+				fw = new FileWriter(path);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}  	   
+			try {
+				fw.write(toWrite.toString());
+				fw.close();
+			} 
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 
 	}
 	

@@ -125,7 +125,7 @@ public class Processor {
 				e.printStackTrace();
 			}
 		double end = System.currentTimeMillis();
-		execQueryWrite += ((end - start) / 1000);
+		execQueryWrite += (end - start);
 		}
 	
 }

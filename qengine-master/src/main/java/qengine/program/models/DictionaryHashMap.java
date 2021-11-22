@@ -79,7 +79,7 @@ public class DictionaryHashMap extends Dictionary {
 			else
 				toAdd[2]= objectIndex;
 			double end = System.currentTimeMillis();
-			execDictionnary += ((end - start) / 1000);
+			execDictionnary += (end - start);
 			return toAdd;
 	}
 	public Integer getKey(String s) {

@@ -98,9 +98,29 @@ final class Main {
 			cmd = sc.nextInt();
 			
 			switch(cmd) {
-			
+//"nomDuFichierDonnee,nomDuFichierRequete,NombreDeTriplet,NombreDeRequete,TempsDeLectureDonnee,TempsDeLectureRequete,TempsDeCreationDico,NombreIndex,TempsCreationIndex,TempsTotalEval,TempsTotal";
 			case 1 : 
 				System.out.println("generation du csv ...");
+				ArrayList<String> csv = new ArrayList<String>();
+				double startCSV = System.currentTimeMillis();
+				parseData();
+				ArrayList<Query> queriesCSV = parseQueries();
+				Processor processorCSV = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesCSV);
+				processorCSV.doQueries();
+				double endCSV = System.currentTimeMillis();
+				double totalTimeCSV = (endCSV - startCSV);
+				csv.add(dataFile);
+				csv.add(queryFile);
+				csv.add(String.valueOf(MainRDFHandler.nbTriplet));
+				csv.add(String.valueOf(queriesCSV.size()));
+				csv.add("0");
+				csv.add("0");
+				csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
+				csv.add("6");
+				csv.add(String.valueOf(IndexOpti.getExecIndex()));
+				csv.add(String.valueOf(totalTimeCSV));
+				csv.add("0");
+				MainRDFHandler.writeToCSV(csv);
 				break;
 			case 2 : 
 				System.out.println("dictionnaire en cours...");
@@ -113,7 +133,7 @@ final class Main {
 				double start = System.currentTimeMillis();
 				MainRDFHandler.writeDictionnary();
 				double end = System.currentTimeMillis();
-				double writeTime = DictionaryHashMap.getTimeDictionnary() + ((end - start) / 1000);
+				double writeTime = DictionaryHashMap.getTimeDictionnary() + (end - start);
 				System.out.println("Temps de création du dictionnaire (AVEC ECRITURE dans /ouput " + writeTime + " secondes");
 				break;
 			case 4 : 
@@ -127,7 +147,7 @@ final class Main {
 				double startIndex = System.currentTimeMillis();
 				MainRDFHandler.writeIndex();
 				double endIndex = System.currentTimeMillis();
-				double writeTimeIndex = IndexOpti.getExecIndex() + ((endIndex - startIndex ) / 1000);
+				double writeTimeIndex = IndexOpti.getExecIndex() + (endIndex - startIndex );
 				System.out.println("Temps de création des 6 index (AVEC ECRITURE dans /output et \n sans prise en compte du temps de création du dictionnaire) " + writeTimeIndex + " secondes \n");
 				break;
 			case 6 : 
@@ -158,10 +178,11 @@ final class Main {
 				allToSee.append("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " secondes \n");
 				allToSee.append("Temps de création des index (SANS ECRITURE) " + IndexOpti.getExecIndex() + " secondes \n");
 				allToSee.append("Temps de création et d'exécution des requêtes (SANS ECRITURE) " + Processor.getExecQuery() + " secondes \n");
-				double totalTime = ((endAll - startAll) / 1000);
+				double totalTime = (endAll - startAll);
 				
 				allToSee.append("Temps d'exécution total de l'application : " + totalTime + " secondes");				
 				System.out.println(allToSee.toString());
+				
 				break;
 			case 0 : 
 				System.out.println("Merci de votre visite, bonne journée !");
@@ -225,7 +246,7 @@ final class Main {
 		
 		return new Query(output.get(0),output.get(1),output.get(2));
 	}
-
+	
 	// ========================================================================
 
 	/**
