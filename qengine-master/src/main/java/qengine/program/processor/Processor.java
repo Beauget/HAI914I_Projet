@@ -51,11 +51,11 @@ public class Processor {
 		return builder.toString();
 	}
 	
-	public   double getExecQuery() {
+	public double getExecQuery() {
 		return execQuery;
 	}
 	
-	public   double getExecQueryWrite() {
+	public  double getExecQueryWrite() {
 		return execQueryWrite;
 	}
 	/*

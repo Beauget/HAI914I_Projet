@@ -78,7 +78,7 @@ final class Main {
 		
 		// user menu
 		
-		/*
+		
 		int cmd = 999;
 		StringBuilder builderBase = new StringBuilder();
 		StringBuilder builder = new StringBuilder();
@@ -158,7 +158,7 @@ final class Main {
 				ArrayList<Query> queries = parseQueries();
 				Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
 				processor.doQueries();
-				System.out.print("Temps de création et d'exécution des requêtes (SANS ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + Processor.getExecQuery() + " secondes \n");
+				System.out.print("Temps de création et d'exécution des requêtes (SANS ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor.getExecQuery() + " secondes \n");
 				break;
 			case 7 : 
 				System.out.println("requête + écriture en cours");
@@ -167,7 +167,7 @@ final class Main {
 				ArrayList<Query> queries2 = parseQueries();
 				Processor processor2 = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries2);
 				processor2.writeAnswers(outputPath);
-				System.out.println("Temps de création et d'exécution des requêtes (AVEC ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + Processor.getExecQueryWrite() + " secondes \n");
+				System.out.println("Temps de création et d'exécution des requêtes (AVEC ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor2.getExecQueryWrite() + " secondes \n");
 				break;
 			case 8 : 
 				StringBuilder allToSee = new StringBuilder();
@@ -179,7 +179,7 @@ final class Main {
 				double endAll = System.currentTimeMillis();
 				allToSee.append("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " secondes \n");
 				allToSee.append("Temps de création des index (SANS ECRITURE) " + IndexOpti.getExecIndex() + " secondes \n");
-				allToSee.append("Temps de création et d'exécution des requêtes (SANS ECRITURE) " + Processor.getExecQuery() + " secondes \n");
+				allToSee.append("Temps de création et d'exécution des requêtes (SANS ECRITURE) " + processorAll.getExecQuery() + " secondes \n");
 				double totalTime = (endAll - startAll);
 				
 				allToSee.append("Temps d'exécution total de l'application : " + totalTime + " secondes");				
@@ -191,9 +191,9 @@ final class Main {
 			default : 
 				System.out.println("Mauvaise entrée clavier");
 			}			
-		}*/
+		}
 		
-		
+		/*
 		
 		parseData();
 		System.out.println("Execution de parseData()...");
@@ -215,7 +215,7 @@ final class Main {
 		
 		System.out.println("Fini !!! ");
 
-		
+		*/
 
 
 	}
