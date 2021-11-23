@@ -10,15 +10,16 @@ import qengine.program.abstract_models.Dictionary;
 import qengine.program.abstract_models.Index;
 import qengine.program.models.IndexOpti;
 import qengine.program.models.Query;
+import qengine.program.models.Select;
 
 
 public class Processor {
-	static Dictionary dictionary;
-	static ArrayList<Index> indexes;
-	static ArrayList<Query> queries;
+	  Dictionary dictionary;
+	  ArrayList<Index> indexes;
+	  ArrayList<Query> queries;
 	
-	static double execQuery = 0;
-	static double execQueryWrite = 0;
+	  double execQuery = 0;
+	  double execQueryWrite = 0;
 	
 	public Processor(Dictionary d, ArrayList<Index> idx, ArrayList<Query> q){
 		this.dictionary = d;
@@ -28,14 +29,18 @@ public class Processor {
 	public String doQueries(){
 		double start = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder();
+		//builder.append("Query , ")
 		for(Query q : queries) {
-			builder.append("QUERY : "+q.toString()+"\n");
-			List<String>  answer = doAQuery(q);
+			List<String> answer = doAQuery(q);
 			if(answer!=null) {
-				builder.append("Answer(s) :"+"\n"+answer.toString()+"\n\n");
+				builder.append(q.getRealQuery()+"\n");
+				for(String s :answer) {
+				builder.append(s.toString()+"\n");
+				}
+				builder.append("\n");
 			}
 			else {
-				builder.append("Combinaison impossible"+"\n\n");
+				//builder.append("Combinaison impossible"+"\n\n");
 			}
 				
 		}
@@ -44,61 +49,101 @@ public class Processor {
 		return builder.toString();
 	}
 	
-	public static double getExecQuery() {
+	public   double getExecQuery() {
 		return execQuery;
 	}
 	
-	public static double getExecQueryWrite() {
+	public   double getExecQueryWrite() {
 		return execQueryWrite;
 	}
+	/*
+	 * @return la réponse à la requete en String
+	 */
 	
-	private static List<String> doAQuery(Query query) {
-		List<Integer> answerInIntegers = doQueryInIntegers(query);
+	private   List<String> doAQuery(Query q) {
+		List<Integer> answerInIntegers = intersectionAnswers(q);
 		if(answerInIntegers!=null)
 			return getAnswersInString(answerInIntegers);
 		return null;
 	}
-	
-	private static List<Integer> doQueryInIntegers(Query q) {
-		ArrayList<Integer> queryInInteger = queryToInteger(q);
-		List<Integer> output= new ArrayList<Integer>();
-		if(!queryInInteger.contains(-1)) {
-			//on enleve les variables qu'on a pas
-			queryInInteger.remove(0);
-			for(Index index : indexes) {
-				List<Integer> answer = index.getAnswer(queryInInteger.get(0), queryInInteger.get(1));
-				if(answer!=null) {
-					return answer;
+	/*
+	 * @return l'intersection des différente réponse en integer
+	 */
+	private   List<Integer> intersectionAnswers(Query q){
+		List<List<Integer>> allAnswers = doQueriesInIntegers(q);
+		List<Integer> output =null;
+		if( allAnswers !=null){
+			output = new ArrayList<Integer>(allAnswers.get(0));
+			if(output!=null) {
+				for (int i = 1; i < allAnswers.size(); i++) {
+					List<Integer> l1 = allAnswers.get(i);
+					if(l1 !=null) {
+						List<Integer> l2 = intersection(l1,output);
+						output = l2;
+					}
+					else 
+						return null;
 				}
 			}
-			//System.out.println("Processor : doQueryInIntegers : toute les variables existe mais combinaison impossible"+"\n");
+			else 
+				return null;
 		}
-		else {
-			//System.out.println(q.toString());
-			//System.out.println("Processor : doQueryInIntegers : Cette requete comporte des objets qui n'existe pas dans le dictionnaire"+"\n");
-			}
-		return null;
+
+		return output;
+		
 	}
 	
-	private static ArrayList<Integer> queryToInteger(Query query){
-		ArrayList<Integer> output = new ArrayList<Integer>();
-		for(String s : query.getValues()) {
-			if(s.equals("?")) {
-				output.add(0);
+	/*
+	 * @return les réponse de chaque triplet en Integer
+	 */
+	private   List<List<Integer>> doQueriesInIntegers(Query q) {
+		List<List<Integer>> queriesInInteger = queriesToInteger(q);
+		List<List<Integer>> output = new ArrayList<List<Integer>>();
+		Integer idx= 0;
+		for(List<Integer> queryInInteger : queriesInInteger) {
+			if(!queryInInteger.contains(-1)) {
+				//on enleve les variables qu'on a pas
+				List<Integer> temp = new ArrayList<Integer>(queryInInteger);
+				temp.remove(0);
+				for(Index index : indexes) {
+					List<Integer> answer = index.getAnswer(temp.get(0), temp.get(1));
+					if(answer!=null) {
+						output.add(answer);
+					}
 				}
-			else {
-				Integer key = dictionary.getKey(s);
-				if(key!=null) {
-					output.add(key);
-				}
-				else //l'objet n'existe pas dans le dictionnaire
-					output.add(-1);
 			}
-		}		
+			else
+				return null;
+		}
+		//On a tr
+		if(queriesInInteger.size()!=output.size())
+			return null;
 		return output;
 	}
 	
-	private static List<String> getAnswersInString(List<Integer> answers ){
+	private   List<List<Integer>> queriesToInteger(Query query){
+		List<List<Integer>> output = new ArrayList<List<Integer>>();
+		for(Select select : query.getQuery()) {
+			List<Integer> toAdd = new ArrayList<Integer>();
+			for(String s : select.getSelect()) {
+				if(s.equals("?")) {
+					toAdd.add(0);
+					}
+				else {
+					Integer key = dictionary.getKey(s);
+					if(key!=null) {
+						toAdd.add(key);
+					}
+					else //l'objet n'existe pas dans le dictionnaire
+						toAdd.add(-1);
+				}
+			}
+			output.add(toAdd);
+		}	
+		return output;
+	}
+	
+	private   List<String> getAnswersInString(List<Integer> answers ){
 		List<String> output = new ArrayList<String>();
 		for(Integer i :answers) {
 			String answer = dictionary.getValue(i);
@@ -107,6 +152,17 @@ public class Processor {
 		}
 		return output;
 	}
+    public   <T> List<T> intersection(List<T> list1, List<T> list2) {
+        List<T> list = new ArrayList<T>();
+
+        for (T t : list1) {
+            if(list2.contains(t)) {
+                list.add(t);
+            }
+        }
+
+        return list;
+    }
 	
 	public void writeAnswers(String path) throws IOException {
 		double start = System.currentTimeMillis();

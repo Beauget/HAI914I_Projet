@@ -42,10 +42,10 @@ import static java.nio.file.StandardOpenOption.*;
 
 public final class MainRDFHandler extends AbstractRDFHandler {
 	
-	static final String outputDictionnary = "/home/dnspc/Desktop/M2/NoSQL/ProjetSSH/HAI914I_Projet/qengine-master/output/dictionnary.txt";
-	static final String outputIndex = "/home/dnspc/Desktop/M2/NoSQL/ProjetSSH/HAI914I_Projet/qengine-master/output/";
-	//static final String outputDictionnary = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/dictionnary.txt";
-	//static final String outputIndex = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
+	//static final String outputDictionnary = "/home/dnspc/Desktop/M2/NoSQL/ProjetSSH/HAI914I_Projet/qengine-master/output/dictionnary.txt";
+	//static final String outputIndex = "/home/dnspc/Desktop/M2/NoSQL/ProjetSSH/HAI914I_Projet/qengine-master/output/";
+	static final String outputDictionnary = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/dictionnary.txt";
+	static final String outputIndex = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
 	
 	
 	

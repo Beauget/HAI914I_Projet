@@ -29,6 +29,7 @@ import qengine.program.abstract_models.Index;
 import qengine.program.models.DictionaryHashMap;
 import qengine.program.models.IndexOpti;
 import qengine.program.models.Query;
+import qengine.program.models.Select;
 import qengine.program.processor.Processor;
 
 /**
@@ -68,8 +69,8 @@ final class Main {
 	static final String dataFile = workingDir + "100K.nt";
 	// ========================================================================
 	
-	static final String outputPath = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
-
+	//static final String outputPath = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
+	static final String outputPath = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
 	/**
 	 * Entrée du programme
 	 */
@@ -77,6 +78,7 @@ final class Main {
 		
 		// user menu
 		
+		/*
 		int cmd = 999;
 		StringBuilder builderBase = new StringBuilder();
 		StringBuilder builder = new StringBuilder();
@@ -189,7 +191,7 @@ final class Main {
 			default : 
 				System.out.println("Mauvaise entrée clavier");
 			}			
-		}
+		}*/
 		
 		
 		
@@ -197,7 +199,7 @@ final class Main {
 		System.out.println("Execution de parseData()...");
 		System.out.println("D�but �criture dans le dossier /output des r�sultats...");
 
-		MainRDFHandler.writeIndex();
+		//MainRDFHandler.writeIndex();
 		
 		
 		System.out.println("Dictionnaire et Index �crit dans le dossier /output");
@@ -220,16 +222,18 @@ final class Main {
 	/**
 	 * Méthode utilisée ici lors du parsing de requête sparql pour agir sur l'objet obtenu.
 	 */
-	public static Query processAQuery(ParsedQuery query) {
+	public static Query processAQuery(ParsedQuery query, Query output) {
 		List<StatementPattern> patterns = StatementPatternCollector.process(query.getTupleExpr());
-	
 		
-		ArrayList<String> output = new ArrayList<String>();
-		for(Var var : patterns.get(0).getVarList()) {
-			if(var.getValue()==null)
-				output.add("?");
-			else
-				output.add(var.getValue().toString());
+		for(StatementPattern p : patterns) {
+			ArrayList<String> pattern = new ArrayList<String>();
+			for(Var var : patterns.get(0).getVarList()) {
+				if(var.getValue()==null)
+					pattern.add("?");
+				else
+					pattern.add(var.getValue().toString());
+			}
+			output.getQuery().add(new Select(pattern.get(0),pattern.get(1),pattern.get(2)));
 		}
 		/*
 		System.out.println("first pattern : " + patterns.get(0));
@@ -243,8 +247,7 @@ final class Main {
 				System.out.println(projection.getProjectionElemList().getElements());
 			}
 		});*/
-		
-		return new Query(output.get(0),output.get(1),output.get(2));
+		return output;
 	}
 	
 	// ========================================================================
@@ -252,6 +255,7 @@ final class Main {
 	/**
 	 * Traite chaque requête lue dans {@link #queryFile} avec {@link #processAQuery(ParsedQuery)}.
 	 */
+	ArrayList<String> s ;
 	private static ArrayList<Query> parseQueries() throws FileNotFoundException, IOException {
 		/**
 		 * Try-with-resources
@@ -279,8 +283,8 @@ final class Main {
 
 				if (line.trim().endsWith("}")) {
 					ParsedQuery query = sparqlParser.parseQuery(queryString.toString(), baseURI);
-
-					queries.add(processAQuery(query)); // Traitement de la requête, à adapter/réécrire pour votre programme
+					Query queryObject = new Query(queryString.toString());
+					queries.add(processAQuery(query,queryObject)); // Traitement de la requête, à adapter/réécrire pour votre programme
 					queryString.setLength(0); // Reset le buffer de la requête en chaine vide
 				}
 			}

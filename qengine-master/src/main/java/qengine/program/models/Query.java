@@ -3,17 +3,34 @@ package qengine.program.models;
 import java.util.ArrayList;
 
 public class Query {
-	ArrayList<String> values = new ArrayList<String>();
+	String realQuery;
+	ArrayList<Select> query = new ArrayList<Select>();
 	
-	public Query(String s1, String s2, String s3) {
-		values.add(s1);
-		values.add(s2);
-		values.add(s3);
+	public Query(String rQ) {
+		this.realQuery = rQ;
 	}
 	
-	public ArrayList<String> getValues() {return this.values;}
 	
+	public void setQuery(ArrayList<Select> query) {
+		this.query = query;
+	}
+
+
+	public ArrayList<Select> getQuery() {return this.query;}
+	
+	
+	public String getRealQuery() {
+		return realQuery;
+	}
+
+
 	public String toString() {
-		return values.toString();
+		StringBuilder builder = new StringBuilder();
+		
+		for(Select s : query) {
+			builder.append(s.toString()+"\n");
+		}
+		
+		return builder.toString();
 	}
 }
