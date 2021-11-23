@@ -70,7 +70,7 @@ final class Main {
 	// ========================================================================
 	
 	//static final String outputPath = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
-	static final String outputPath = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
+	static String outputPath = "output/";
 	/**
 	 * EntrÃ©e du programme
 	 */
@@ -82,7 +82,16 @@ final class Main {
 		int cmd = 999;
 		StringBuilder builderBase = new StringBuilder();
 		StringBuilder builder = new StringBuilder();
+		StringBuilder toPath = new StringBuilder();
+		
+		toPath.append("Veuillez entrer le path output pour les résultats de l'application (output/ par défaut écrire \"defaut\")");
+		System.out.println(toPath.toString());
 		Scanner sc = new Scanner(System.in);
+		String toChange = sc.next();
+		if(!(toChange.equals("defaut"))) {
+			outputPath = toChange;
+		}
+		System.out.println(outputPath);
 		builderBase.append("--- Bienvenue dans notre moteur de requÃªte RDF --- \n");
 		System.out.println(builderBase.toString());
 		builder.append("Options disponible (taper le chiffre correspondant Ã  l'option) : \n" );
@@ -100,11 +109,6 @@ final class Main {
 			cmd = sc.nextInt();
 			
 			switch(cmd) {
-/*"nomDuFichierDonnee,nomDuFichierRequete,NombreDeTriplet,
- *NombreDeRequete,TempsDeLectureDonnee,TempsDeLectureRequete,
- *TempsDeCreationDico,NombreIndex,
- *TempsCreationIndex,TempsTotalEval,TempsTotal";
- */
 			case 1 : 
 				System.out.println("generation du csv ...");
 				ArrayList<String> csv = new ArrayList<String>();
@@ -197,7 +201,7 @@ final class Main {
 				System.out.println("Merci de votre visite, bonne journÃ©e !");
 			default : 
 				System.out.println("Mauvaise entrÃ©e clavier");
-			}			
+				}			
 		}
 		
 		/*

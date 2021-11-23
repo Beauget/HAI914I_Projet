@@ -1,2 +1,2 @@
 nomDuFichierDonnee,nomDuFichierRequete,NombreDeTriplet,NombreDeRequete,TempsDeLectureDonnee,TempsDeLectureRequete,TempsDeCreationDico,NombreIndex,TempsCreationIndex,TempsTotalEval,TempsTotal
-data/100K.nt,data/STAR_ALL_workload.queryset,107338,1200,0,0,22174.0,6,0.16900000000000012,23356.0,0
+data/100K.nt,data/STAR_ALL_workload.queryset,107338,1200,0,0,21401.0,6,0.21700000000000016,22581.0,0
