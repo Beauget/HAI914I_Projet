@@ -84,7 +84,7 @@ final class Main {
 		StringBuilder builder = new StringBuilder();
 		StringBuilder toPath = new StringBuilder();
 		
-		toPath.append("Veuillez entrer le path output pour les résultats de l'application (output/ par défaut écrire \"defaut\")");
+		toPath.append("Veuillez entrer le path output pour les rï¿½sultats de l'application (output/ par dï¿½faut ï¿½crire \"defaut\")");
 		System.out.println(toPath.toString());
 		Scanner sc = new Scanner(System.in);
 		String toChange = sc.next();
@@ -117,19 +117,22 @@ final class Main {
 				ArrayList<Query> queriesCSV = parseQueries();
 				Processor processorCSV = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesCSV);
 				processorCSV.doQueries();
+				processorCSV.writeAnswers(outputPath);
 				double endCSV = System.currentTimeMillis();
 				double totalTimeCSV = (endCSV - startCSV);
 				csv.add(dataFile);
 				csv.add(queryFile);
 				csv.add(String.valueOf(MainRDFHandler.nbTriplet));
 				csv.add(String.valueOf(queriesCSV.size()));
-				csv.add("0");
-				csv.add("0");
+				csv.add("NON_DISPONIBLE");
+				csv.add("NON_DISPONIBLE");
 				csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
 				csv.add("6");
 				csv.add(String.valueOf(IndexOpti.getExecIndex()));
 				csv.add(String.valueOf(totalTimeCSV));
-				csv.add("0");
+				double endCSV2 = System.currentTimeMillis();
+				totalTimeCSV = (endCSV2 - startCSV);
+				csv.add(String.valueOf(totalTimeCSV));
 				MainRDFHandler.writeToCSV(csv);
 				break;
 			case 2 : 
@@ -203,31 +206,6 @@ final class Main {
 				System.out.println("Mauvaise entrÃ©e clavier");
 				}			
 		}
-		
-		/*
-		
-		parseData();
-		System.out.println("Execution de parseData()...");
-		System.out.println("Dï¿½but ï¿½criture dans le dossier /output des rï¿½sultats...");
-
-		//MainRDFHandler.writeIndex();
-		
-		
-		System.out.println("Dictionnaire et Index ï¿½crit dans le dossier /output");
-		
-		System.out.println("Execution de parseQueries()...");
-		ArrayList<Query> queries = parseQueries();
-		System.out.println("CrÃ©ation de Processor...");
-		Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
-		
-		System.out.println("Traitement des query et Ã©criture...");
-		//String outputPath = "/home/hayaat/Desktop/Master/M2/Git/HAI914I_Projet/qengine-master/output/";
-		processor.writeAnswers(outputPath);
-		
-		System.out.println("Fini !!! ");
-
-		*/
-
 
 	}
 	/**

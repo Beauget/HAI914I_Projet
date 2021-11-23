@@ -64,7 +64,7 @@ public class IndexOpti extends Index{
 		
 		double end = System.currentTimeMillis();
 		
-		execIndex += ((end - start) / 1000);
+		execIndex += (end - start);
 		
 	}
 	
