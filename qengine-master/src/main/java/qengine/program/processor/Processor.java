@@ -29,14 +29,14 @@ public class Processor {
 	public String doQueries(){
 		double start = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder();
-		//builder.append("Query , ")
+		builder.append("Query , Answer(s) \n");
 		for(Query q : queries) {
 			List<String> answer = doAQuery(q);
 			if(answer!=null) {
 				if(answer.size()!=0) {
-					builder.append(q.getRealQuery()+"\n");
+					builder.append(q.getRealQuery()+" ,");
 					for(String s :answer) {
-					builder.append(s.toString()+"\n");
+					builder.append(s.toString()+" ");
 					}
 					builder.append("\n");
 				}
@@ -169,7 +169,7 @@ public class Processor {
 	
 	public void writeAnswers(String path) throws IOException {
 		double start = System.currentTimeMillis();
-		String pathToFile = path + "Answers" + ".txt";
+		String pathToFile = path + "export_query_results" + ".csv";
 		FileWriter fw = null;
 		try {
 			fw = new FileWriter(pathToFile);

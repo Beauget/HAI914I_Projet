@@ -139,13 +139,14 @@ final class Main {
 				System.out.println("Temps de création du dictionnaire (AVEC ECRITURE dans /ouput " + writeTime + " secondes");
 				break;
 			case 4 : 
-				System.out.println("index en cours");
+				System.out.println("dictionnaire, index ecriture en cours..");
 				parseData();
 				System.out.println("Temps de création des 6 index (SANS ECRITURE et sans prise en compte du temps de création du dictionnaire) " + IndexOpti.getExecIndex() + " secondes");
 				break;
 			case 5 : 
-				System.out.println("index et écriture en cours");
+				System.out.println("dictionnaire,index ecriture en cours..");
 				parseData();
+				System.out.println("écriture en cours");
 				double startIndex = System.currentTimeMillis();
 				MainRDFHandler.writeIndex();
 				double endIndex = System.currentTimeMillis();
@@ -153,17 +154,19 @@ final class Main {
 				System.out.println("Temps de création des 6 index (AVEC ECRITURE dans /output et \n sans prise en compte du temps de création du dictionnaire) " + writeTimeIndex + " secondes \n");
 				break;
 			case 6 : 
-				System.out.println("requête en cours");
+				System.out.println("dictionnaire,index ecriture en cours..");
 				parseData();
+				System.out.println("requête en cours");
 				ArrayList<Query> queries = parseQueries();
 				Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
 				processor.doQueries();
 				System.out.print("Temps de création et d'exécution des requêtes (SANS ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor.getExecQuery() + " secondes \n");
 				break;
 			case 7 : 
+				System.out.println("dictionnaire,index ecriture en cours..");
+				parseData();
 				System.out.println("requête + écriture en cours");
 				System.out.println("requête en cours");
-				parseData();
 				ArrayList<Query> queries2 = parseQueries();
 				Processor processor2 = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries2);
 				processor2.writeAnswers(outputPath);
@@ -283,7 +286,7 @@ final class Main {
 
 				if (line.trim().endsWith("}")) {
 					ParsedQuery query = sparqlParser.parseQuery(queryString.toString(), baseURI);
-					Query queryObject = new Query(queryString.toString());
+					Query queryObject = new Query(queryString.toString().trim().replace("\t", ""));
 					queries.add(processAQuery(query,queryObject)); // Traitement de la requête, à adapter/réécrire pour votre programme
 					queryString.setLength(0); // Reset le buffer de la requête en chaine vide
 				}
