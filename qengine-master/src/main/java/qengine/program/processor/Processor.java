@@ -33,11 +33,13 @@ public class Processor {
 		for(Query q : queries) {
 			List<String> answer = doAQuery(q);
 			if(answer!=null) {
-				builder.append(q.getRealQuery()+"\n");
-				for(String s :answer) {
-				builder.append(s.toString()+"\n");
+				if(answer.size()!=0) {
+					builder.append(q.getRealQuery()+"\n");
+					for(String s :answer) {
+					builder.append(s.toString()+"\n");
+					}
+					builder.append("\n");
 				}
-				builder.append("\n");
 			}
 			else {
 				//builder.append("Combinaison impossible"+"\n\n");
@@ -80,6 +82,7 @@ public class Processor {
 					if(l1 !=null) {
 						List<Integer> l2 = intersection(l1,output);
 						output = l2;
+						
 					}
 					else 
 						return null;

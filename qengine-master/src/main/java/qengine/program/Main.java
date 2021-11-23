@@ -227,7 +227,7 @@ final class Main {
 		
 		for(StatementPattern p : patterns) {
 			ArrayList<String> pattern = new ArrayList<String>();
-			for(Var var : patterns.get(0).getVarList()) {
+			for(Var var :p.getVarList()) {
 				if(var.getValue()==null)
 					pattern.add("?");
 				else
