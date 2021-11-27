@@ -48,28 +48,28 @@ import qengine.program.processor.Processor;
  * 
  * @author Olivier Rodriguez <olivier.rodriguez1@umontpellier.fr>
  */
+
 final class Main {
 	static final String baseURI = null;
 
 	/**
 	 * Votre répertoire de travail où vont se trouver les fichiers à lire
 	 */
-	static final String workingDir = "data/";
+	static String workingDir = "data/";
 
 	/**
 	 * Fichier contenant les requêtes sparql
 	 */
 	//static final String queryFile = workingDir + "sample_query.queryset";
-	static final String queryFile = workingDir + "STAR_ALL_workload.queryset";
+	static String queryFile = workingDir + "STAR_ALL_workload.queryset";
 
 	/**
 	 * Fichier contenant des données rdf
 	 */
 	//static final String dataFile = workingDir + "sample_data.nt";
-	static final String dataFile = workingDir + "100K.nt";
+	static String dataFile = workingDir + "100K.nt";
 	// ========================================================================
 	
-	//static final String outputPath = "/home/dnspc/Desktop/M2/NoSQL/Projet/HAI914I_Projet/qengine-master/output/";
 	static String outputPath = "output/";
 	/**
 	 * Entrée du programme
@@ -84,25 +84,35 @@ final class Main {
 		StringBuilder builder = new StringBuilder();
 		StringBuilder toPath = new StringBuilder();
 		
-		toPath.append("Veuillez entrer le path output pour les r�sultats de l'application (output/ par d�faut �crire \"defaut\")");
-		System.out.println(toPath.toString());
+		System.out.println("Veuillez entrer le path du fichier contenant les requêtes sparql(si vous souhaitez tester le code avec "+
+				"STAR_ALL_workload.queryset et 100K.nt écrire \"defaut\")");
+
 		Scanner sc = new Scanner(System.in);
-		String toChange = sc.next();
-		if(!(toChange.equals("defaut"))) {
-			outputPath = toChange;
+			String firstEntry = sc.next();
+		if(!(firstEntry.equals("defaut"))) {
+			dataFile = firstEntry;
+			System.out.println("Veuillez entrer le path du fichier contenant des données rdf :");
+
+			sc = new Scanner(System.in);
+			queryFile = sc.next();
+			System.out.println("Veuillez entrer le path du document contenant le chemin vers le output :");
+
+			sc = new Scanner(System.in);
+			outputPath = sc.next();
 		}
-		System.out.println(outputPath);
+
 		builderBase.append("--- Bienvenue dans notre moteur de requête RDF --- \n");
 		System.out.println(builderBase.toString());
 		builder.append("Options disponible (taper le chiffre correspondant à l'option) : \n" );
-		builder.append("\n1 : Création du .csv contenant tout les résultats de l'application");
-		builder.append("\n2 : Création du dictionnaire et temps d'éxecution (SANS ECRITURE /output)");
-		builder.append("\n3 : Création du dictionnaire et temps d'éxecution (AVEC ECRITURE /output)");
+		builder.append("\n1 : Création du dictionnaire, index et réponses aux requêtes et du .csv contenant les temps de calculs et des informations sur les fichier");
+		builder.append("\n2 : Création du dictionnaire et temps d'exécution (SANS ECRITURE /output)");
+		builder.append("\n3 : Création du dictionnaire et temps d'exécution (AVEC ECRITURE /output)");
 		builder.append("\n4 : Création des indexs et temps d'exécution (SANS ECRITURE /output)");
 		builder.append("\n5 : Création des indexs et temps d'exécution (AVEC ECRITURE /output)");
 		builder.append("\n6 : Chargement + exécution des requêtes et temps d'exécution (SANS ECRITURE /output)");
 		builder.append("\n7 : Chargement + exécution des requêtes et temps d'exécution (AVEC ECRITURE /output)");
 		builder.append("\n8 : Toute les données des options précédentes (SANS ECRITURE)");
+		builder.append("\n9 : Toute les données des options précédentes (AVEC ECRITURE)");
 		builder.append("\n0 : Quittez l'application");
 		while(cmd != 0) {
 			System.out.println(builder.toString());
@@ -110,16 +120,16 @@ final class Main {
 			
 			switch(cmd) {
 			case 1 : 
-				System.out.println("generation du csv ...");
+				System.out.println("Traitement en cours ...");
 				ArrayList<String> csv = new ArrayList<String>();
 				double startCSV = System.currentTimeMillis();
 				parseData();
 				ArrayList<Query> queriesCSV = parseQueries();
 				Processor processorCSV = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesCSV);
 				processorCSV.doQueries();
-				processorCSV.writeAnswers(outputPath);
 				double endCSV = System.currentTimeMillis();
 				double totalTimeCSV = (endCSV - startCSV);
+				System.out.println("Génération du csv ...");
 				csv.add(dataFile);
 				csv.add(queryFile);
 				csv.add(String.valueOf(MainRDFHandler.nbTriplet));
@@ -133,60 +143,71 @@ final class Main {
 				double endCSV2 = System.currentTimeMillis();
 				totalTimeCSV = (endCSV2 - startCSV);
 				csv.add(String.valueOf(totalTimeCSV));
-				MainRDFHandler.writeToCSV(csv);
+				MainRDFHandler.writeToCSV(csv, "option_1_data_output");
+				System.out.println("Fin de l'option \n");
 				break;
+				
 			case 2 : 
-				System.out.println("dictionnaire en cours...");
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
 				System.out.println("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " ms");
+				System.out.println("Fin de l'option \n");
 				break;
+				
 			case 3 : 
-				System.out.println("dictionnaire ecriture en cours..");
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
 				double start = System.currentTimeMillis();
 				MainRDFHandler.writeDictionnary();
 				double end = System.currentTimeMillis();
 				double writeTime = DictionaryHashMap.getTimeDictionnary() + (end - start);
 				System.out.println("Temps de création du dictionnaire (AVEC ECRITURE dans /ouput " + writeTime + " ms");
+				System.out.println("Fin de l'option \n");
 				break;
+				
 			case 4 : 
-				System.out.println("dictionnaire, index ecriture en cours..");
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
 				System.out.println("Temps de création des 6 index (SANS ECRITURE et sans prise en compte du temps de création du dictionnaire) " + IndexOpti.getExecIndex() + " ms");
 				break;
+				
 			case 5 : 
-				System.out.println("dictionnaire,index ecriture en cours..");
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
-				System.out.println("écriture en cours");
+				System.out.println("Écritures des données");
 				double startIndex = System.currentTimeMillis();
 				MainRDFHandler.writeIndex();
 				double endIndex = System.currentTimeMillis();
 				double writeTimeIndex = IndexOpti.getExecIndex() + (endIndex - startIndex );
 				System.out.println("Temps de création des 6 index (AVEC ECRITURE dans /output et \n sans prise en compte du temps de création du dictionnaire) " + writeTimeIndex + " ms \n");
+				System.out.println("Fin de l'option \n");
 				break;
 			case 6 : 
-				System.out.println("dictionnaire,index ecriture en cours..");
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
-				System.out.println("requête en cours");
+				System.out.println("Requête(s) en cours");
 				ArrayList<Query> queries = parseQueries();
 				Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
 				processor.doQueries();
 				System.out.print("Temps de création et d'exécution des requêtes (SANS ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor.getExecQuery() + " ms \n");
+				System.out.println("Fin de l'option \n");
 				break;
 			case 7 : 
-				System.out.println("dictionnaire,index ecriture en cours..");
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
-				System.out.println("requête + écriture en cours");
-				System.out.println("requête en cours");
+				System.out.println("Requête(s) en cours");
 				ArrayList<Query> queries2 = parseQueries();
 				Processor processor2 = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries2);
 				processor2.writeAnswers(outputPath);
 				System.out.println("Temps de création et d'exécution des requêtes (AVEC ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor2.getExecQueryWrite() + " ms \n");
+				System.out.println("Fin de l'option \n");
 				break;
 			case 8 : 
 				StringBuilder allToSee = new StringBuilder();
 				double startAll = System.currentTimeMillis();
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
+				System.out.println("Requête(s) en cours");
 				ArrayList<Query> queriesAll = parseQueries();
 				Processor processorAll = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesAll);
 				processorAll.doQueries();
@@ -198,15 +219,51 @@ final class Main {
 				
 				allToSee.append("Temps d'exécution total de l'application : " + totalTime + " ms");				
 				System.out.println(allToSee.toString());
+				System.out.println("Fin de l'option \n");
+				break;
+			case 9 : 
+				double startWrite = System.currentTimeMillis();
+				csv = new ArrayList<String>();
+				System.out.println(" Création du dictionnaire et de l'index en cours..");
+				parseData();
+				System.out.println("Requête(s) en cours");
+				ArrayList<Query> queriesWrite = parseQueries();
+				Processor processorWrite = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesWrite);
+				processorWrite.doQueries();				
+				double endWrite = System.currentTimeMillis();
+				double totalTimeWrite = (endWrite - startWrite);
+				System.out.println("Écritures des données Dictionnaire, Index et Query..");
 				
+				MainRDFHandler.writeDictionnary();
+				MainRDFHandler.writeIndex();
+				processorWrite.writeAnswers(outputPath);
+
+				System.out.println("Écritures du csv..");
+				csv.add(dataFile);
+				csv.add(queryFile);
+				csv.add(String.valueOf(MainRDFHandler.nbTriplet));
+				csv.add(String.valueOf(queriesWrite.size()));
+				csv.add("NON_DISPONIBLE");
+				csv.add("NON_DISPONIBLE");
+				csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
+				csv.add("6");
+				csv.add(String.valueOf(IndexOpti.getExecIndex()));
+				csv.add(String.valueOf(totalTimeWrite));
+				double endWrite2 = System.currentTimeMillis();
+				totalTimeCSV = (endWrite2 - startWrite);
+				csv.add(String.valueOf(totalTimeCSV));
+				MainRDFHandler.writeToCSV(csv, "option_8_data_output");
+				System.out.println("Fin de l'option \n");
 				break;
 			case 0 : 
 				System.out.println("Merci de votre visite, bonne journée !");
+				break;
 			default : 
 				System.out.println("Mauvaise entrée clavier");
+				break;
 				}			
 		}
-
+//mvn clean compile assembly:single
 	}
 	/**
 	 * Méthode utilisée ici lors du parsing de requête sparql pour agir sur l'objet obtenu.
@@ -224,18 +281,6 @@ final class Main {
 			}
 			output.getQuery().add(new Select(pattern.get(0),pattern.get(1),pattern.get(2)));
 		}
-		/*
-		System.out.println("first pattern : " + patterns.get(0));
-		System.out.println("object of the first pattern : " + patterns.get(0).getObjectVar().getValue());
-
-		System.out.println("variables to project : ");
-		//Utilisation d'une classe anonyme
-		query.getTupleExpr().visit(new AbstractQueryModelVisitor<RuntimeException>() {
-
-			public void meet(Projection projection) {
-				System.out.println(projection.getProjectionElemList().getElements());
-			}
-		});*/
 		return output;
 	}
 	

@@ -164,9 +164,9 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 	}
 	
 	
-	public static void writeToCSV(ArrayList<String> addToCSV) {
+	public static void writeToCSV(ArrayList<String> addToCSV , String optionName) {
 		String toWrite = "nomDuFichierDonnee,nomDuFichierRequete,NombreDeTriplet,NombreDeRequete,TempsDeLectureDonnee,TempsDeLectureRequete,TempsDeCreationDico,NombreIndex,TempsCreationIndex,TempsTotalEval,TempsTotal\n";
-		String path = outputIndex + "leRESULTAT" + ".csv";
+		String path = outputIndex + optionName + ".csv";
 		for(String s : addToCSV) {
 			toWrite+= s+",";
 		}
@@ -187,7 +187,6 @@ public final class MainRDFHandler extends AbstractRDFHandler {
 				e.printStackTrace();
 			}
 		}
-
 
 	}
 	
