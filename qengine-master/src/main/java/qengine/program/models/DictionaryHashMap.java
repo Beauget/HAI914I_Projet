@@ -11,11 +11,12 @@ import qengine.program.abstract_models.Dictionary;
 
 public class DictionaryHashMap extends Dictionary {
 	
-	static HashMap<Integer,String> dictionary= new HashMap<Integer,String>();
+	private HashMap<Integer,String> dictionary= new HashMap<Integer,String>();
 	static double execDictionnary = 0;
 	
 	public DictionaryHashMap(){
 		super();
+		execDictionnary = 0;
 		// TODO Auto-generated constructor stub
 	}
 	

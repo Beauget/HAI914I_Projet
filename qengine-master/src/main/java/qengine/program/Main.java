@@ -124,7 +124,9 @@ final class Main {
 				ArrayList<String> csv = new ArrayList<String>();
 				double startCSV = System.currentTimeMillis();
 				parseData();
+				double startq = System.currentTimeMillis();
 				ArrayList<Query> queriesCSV = parseQueries();
+				double endq = System.currentTimeMillis();
 				Processor processorCSV = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesCSV);
 				processorCSV.doQueries();
 				double endCSV = System.currentTimeMillis();
@@ -135,7 +137,7 @@ final class Main {
 				csv.add(String.valueOf(MainRDFHandler.nbTriplet));
 				csv.add(String.valueOf(queriesCSV.size()));
 				csv.add("NON_DISPONIBLE");
-				csv.add("NON_DISPONIBLE");
+				csv.add(String.valueOf(endq - startq));
 				csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
 				csv.add("6");
 				csv.add(String.valueOf(IndexOpti.getExecIndex()));
@@ -227,7 +229,9 @@ final class Main {
 				System.out.println(" Création du dictionnaire et de l'index en cours..");
 				parseData();
 				System.out.println("Requête(s) en cours");
+				startq = System.currentTimeMillis();
 				ArrayList<Query> queriesWrite = parseQueries();
+				endq = System.currentTimeMillis();
 				Processor processorWrite = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesWrite);
 				processorWrite.doQueries();				
 				double endWrite = System.currentTimeMillis();
@@ -244,7 +248,7 @@ final class Main {
 				csv.add(String.valueOf(MainRDFHandler.nbTriplet));
 				csv.add(String.valueOf(queriesWrite.size()));
 				csv.add("NON_DISPONIBLE");
-				csv.add("NON_DISPONIBLE");
+				csv.add(String.valueOf(endq - startq));
 				csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
 				csv.add("6");
 				csv.add(String.valueOf(IndexOpti.getExecIndex()));

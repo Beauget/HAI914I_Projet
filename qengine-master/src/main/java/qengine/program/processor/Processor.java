@@ -40,11 +40,7 @@ public class Processor {
 					}
 					builder.append("\n");
 				}
-			}
-			else {
-				//builder.append("Combinaison impossible"+"\n\n");
-			}
-				
+			}				
 		}
 		double end = System.currentTimeMillis();
 		execQuery += ((end - start) / 1000);
@@ -91,9 +87,7 @@ public class Processor {
 			else 
 				return null;
 		}
-
 		return output;
-		
 	}
 	
 	/*

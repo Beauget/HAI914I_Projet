@@ -22,6 +22,7 @@ public class IndexOpti extends Index{
 		super(orderIndex);
 		order = orderIndex;
 		index = new HashMap<Integer,HashMap<Integer,List<Integer>>>();
+		execIndex = 0;
 	}
 	
 	
