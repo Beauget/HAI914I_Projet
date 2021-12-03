@@ -61,7 +61,7 @@ final class Main {
 	 * Fichier contenant les requêtes sparql
 	 */
 	//static final String queryFile = workingDir + "sample_query.queryset";
-	static String queryFile = workingDir + "STAR_ALL_workload.queryset";
+	static String queryFile = workingDir + "test.queryset";
 
 	/**
 	 * Fichier contenant des données rdf
@@ -146,6 +146,11 @@ final class Main {
 				totalTimeCSV = (endCSV2 - startCSV);
 				csv.add(String.valueOf(totalTimeCSV));
 				MainRDFHandler.writeToCSV(csv, "option_1_data_output");
+				
+				System.out.println(processorCSV.numberOfQueries());
+				System.out.println(processorCSV.numberOfDuplicates());
+				System.out.println(processorCSV.numberOfDuplicatesHashMap());
+				
 				System.out.println("Fin de l'option \n");
 				break;
 				

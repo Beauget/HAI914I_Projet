@@ -38,6 +38,10 @@ public class Select {
 	public void setAnswer(ArrayList<Integer> answer) {
 		this.answer = answer;
 	}
+	
+	public boolean isSameAs(Select s) {
+		return this.getSelect().containsAll(s.getSelect());
+	}
 
 
 	@Override

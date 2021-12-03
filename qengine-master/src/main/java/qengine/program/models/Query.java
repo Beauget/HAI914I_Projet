@@ -22,6 +22,9 @@ public class Query {
 	public String getRealQuery() {
 		return realQuery;
 	}
+	public boolean isSameAs(Query q) {
+		return this.getQuery().containsAll(q.getQuery());
+	}
 
 
 	public String toString() {

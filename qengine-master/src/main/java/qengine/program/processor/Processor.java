@@ -3,6 +3,7 @@ package qengine.program.processor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import arq.query;
@@ -26,6 +27,51 @@ public class Processor {
 		this.indexes = idx;
 		this.queries = q;
 	}
+	public int numberOfNoAnswer(){
+		int output = 0;
+		for(Query q : queries) {
+			List<String> answer = doAQuery(q);
+			if(answer==null) {
+				output++;
+			}				
+		}
+		return output;
+	}
+	
+	public int numberOfQueries() {
+		return this.queries.size();
+	}
+	
+	public int numberOfDuplicates(){
+		int output = 0;
+		for(int i=0 ; i< queries.size()-1; i++) {
+			for(int j=i+1 ; j< queries.size();j++) {
+				if(queries.get(i).toString().equals(queries.get(j).toString())) {
+					output++;
+					System.out.println(queries.get(i).toString());
+					System.out.println();
+				}
+			}
+		}
+		return output;
+	}
+	
+	public int numberOfDuplicatesHashMap(){
+		int output = 0;
+		HashMap<String,Integer> mapQueries = new HashMap<String,Integer>();
+		for(Query q : queries) {
+			if(mapQueries.get(q.toString())==null) {
+				mapQueries.put(q.toString(), 1);
+			}
+			else {
+				Integer v = mapQueries.get(q.toString());
+				mapQueries.put(q.toString(), v+1);
+				output++;
+			}
+		}
+		return output;
+	}
+	
 	public String doQueries(){
 		double start = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder();
