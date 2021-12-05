@@ -39,8 +39,9 @@ public class Select {
 		this.answer = answer;
 	}
 	
-	public boolean isSameAs(Select s) {
-		return this.getSelect().containsAll(s.getSelect());
+	public boolean equals(Select s) {
+		boolean output = this.toString().equals(s.toString());
+		return output;
 	}
 
 

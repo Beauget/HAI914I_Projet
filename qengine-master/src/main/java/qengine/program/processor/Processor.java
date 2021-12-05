@@ -4,7 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import arq.query;
 import qengine.program.abstract_models.Dictionary;
@@ -46,17 +48,18 @@ public class Processor {
 		int output = 0;
 		for(int i=0 ; i< queries.size()-1; i++) {
 			for(int j=i+1 ; j< queries.size();j++) {
-				if(queries.get(i).toString().equals(queries.get(j).toString())) {
+				if(queries.get(i).equals(queries.get(j))) {
 					output++;
-					System.out.println(queries.get(i).toString());
-					System.out.println();
 				}
 			}
 		}
 		return output;
 	}
+	/*
+	 * @return une hashMap contenant les queries et leur nombre d'apparition
+	 */
 	
-	public int numberOfDuplicatesHashMap(){
+	public HashMap<String,Integer> queriesDuplicatesHashMap(){
 		int output = 0;
 		HashMap<String,Integer> mapQueries = new HashMap<String,Integer>();
 		for(Query q : queries) {
@@ -69,9 +72,60 @@ public class Processor {
 				output++;
 			}
 		}
-		return output;
+		return mapQueries;
 	}
 	
+	public List<Query> queriesDuplicatesArrayList(){
+		ArrayList output = new ArrayList();
+		for(int i=0 ; i< queries.size()-1; i++) {
+			Integer numberOfDuplicate = 0;
+			for(int j=i+1 ; j< queries.size();j++) {
+				if(queries.get(i).equals(queries.get(j))) {	
+					numberOfDuplicate++;
+					//c'est le 3+ doublon que je trouve, je l'ajoute a la liste de query à supprimer
+					if(numberOfDuplicate>1) {
+						output.add(queries.get(j));	
+					}
+				}
+			}
+		}
+		return output;
+	}
+	/*
+	 * @return  ArrayList<Query> queries contenant maintenant au plus deux doublons par queries
+	 */
+	public void cleanDuplicates2() {
+		List<Query> queriesToRemove = queriesDuplicatesArrayList();
+		System.out.println(queriesToRemove.toString());
+		for(Query q : queriesToRemove) {
+			queries.remove(q);
+		}
+		System.out.println(queries.toString());
+	}
+	
+	/*
+	 * @return  ArrayList<Query> queries contenant maintenant au plus deux doublons par queries
+	 */
+	public void cleanDuplicates() {
+		HashMap<String,Integer> uncleanQueries = queriesDuplicatesHashMap();
+		for (Map.Entry<String, Integer> entry : uncleanQueries.entrySet()) {
+		    Integer value = entry.getValue();
+		    if(value>2) {
+			    String key = entry.getKey();
+			    //nombre de fois qu'il doit etre enleve
+			    Integer numberOfTimesToRemove = value-2;
+			    //on utilise un iterrator pour iterer et remove
+				for (Iterator<Query> qs = queries.iterator(); qs.hasNext();) {
+					Query query = qs.next();
+				    if (query.toString().equals(key)&&numberOfTimesToRemove>0) {
+				    	qs.remove();
+				    	numberOfTimesToRemove--;
+				    }
+				}
+			}
+		}
+		System.out.println(queries.toString());
+	}
 	public String doQueries(){
 		double start = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder();

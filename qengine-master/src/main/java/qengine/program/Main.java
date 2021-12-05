@@ -149,7 +149,7 @@ final class Main {
 				
 				System.out.println(processorCSV.numberOfQueries());
 				System.out.println(processorCSV.numberOfDuplicates());
-				System.out.println(processorCSV.numberOfDuplicatesHashMap());
+				processorCSV.cleanDuplicates2();
 				
 				System.out.println("Fin de l'option \n");
 				break;
