@@ -63,9 +63,9 @@ final class Main {
 	/**
 	 * Fichier contenant les requêtes sparql
 	 */
-	static String queryFile = workingDir + "STAR_ALL_workload.queryset";
+	//static String queryFile = workingDir + "STAR_ALL_workload.queryset";
 	//static String queryFile = workingDir + "/1000/STAR_ALL_workload_1000.queryset";
-	//static String queryFile = workingDir + "/1000/STAR_ALL_workload_1000.queryset";
+	static String queryFile = workingDir + "/100/STAR_ALL_workload_100.queryset";
 	//static String queryFile = workingDir + "/10000/STAR_ALL_workload_10000.queryset";
 	//static String queryFile = workingDir + "test.queryset";
 
@@ -73,7 +73,7 @@ final class Main {
 	 * Fichier contenant des données rdf
 	 */
 	//static final String dataFile = workingDir + "sample_data.nt";
-	static String dataFile = workingDir + "100K.nt";
+	static String dataFile = workingDir + "500K.rdf";
 	// ========================================================================
 	
 	static String outputPath = "output/";
@@ -108,10 +108,10 @@ final class Main {
 		}
 		
 		/* Utiliser pour append le contenus des template dans un fichier*/
-		/*
-		appendToFileJava11("100");
-		appendToFileJava11("1000");
-		appendToFileJava11("10000");*/
+		
+		//appendToFileJava11("100");
+		//appendToFileJava11("1000");
+		//appendToFileJava11("10000");
 		
 		builderBase.append("--- Bienvenue dans notre moteur de requête RDF --- \n");
 		System.out.println(builderBase.toString());
@@ -369,19 +369,21 @@ final class Main {
 	// Java 11, writeString, append mode
 	  private static void appendToFileJava11(String number)
 				throws IOException {
-		  String[] fileList = {"Q_1_eligibleregion_",
+		  String[] fileList = {
+				  //"Q_1_eligibleregion_",
 				  "Q_1_includes_",
 				  "Q_1_likes_",
-				  "Q_1_nationality_",
+				  //"Q_1_nationality_",
 				  "Q_1_subscribes_",
-				  "Q_2_includes_eligibleRegion_",
-				  "Q_2_likes_nationality_",
-				  "Q_2_subscribes_likes_",
-				  "Q_2_tag_homepage_",
-				  "Q_3_location_gender_type_",
-				  "Q_3_location_nationality_gender_",
-				  "Q_3_nationality_gender_type_",
-				  "Q_4_location_nationality_gender_type_"};
+				  //"Q_2_includes_eligibleRegion_",
+				  //"Q_2_likes_nationality_",
+				  "Q_2_subscribes_likes_"
+				  //"Q_2_tag_homepage_",
+				  //"Q_3_location_gender_type_",
+				  //"Q_3_location_nationality_gender_",
+				  //"Q_3_nationality_gender_type_",
+				  //"Q_4_location_nationality_gender_type_"
+				  };
 		  Path pathToAdd = Path.of(workingDir +number +"/STAR_ALL_workload_"+number+".queryset");
 		  for(String name : fileList) {
 			  Path fileName = Path.of(workingDir +number +"/"+name+number+".queryset");
