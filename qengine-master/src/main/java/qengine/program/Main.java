@@ -4,8 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -60,8 +63,11 @@ final class Main {
 	/**
 	 * Fichier contenant les requêtes sparql
 	 */
-	//static final String queryFile = workingDir + "sample_query.queryset";
-	static String queryFile = workingDir + "test.queryset";
+	static String queryFile = workingDir + "STAR_ALL_workload.queryset";
+	//static String queryFile = workingDir + "/1000/STAR_ALL_workload_1000.queryset";
+	//static String queryFile = workingDir + "/1000/STAR_ALL_workload_1000.queryset";
+	//static String queryFile = workingDir + "/10000/STAR_ALL_workload_10000.queryset";
+	//static String queryFile = workingDir + "test.queryset";
 
 	/**
 	 * Fichier contenant des données rdf
@@ -100,7 +106,13 @@ final class Main {
 			sc = new Scanner(System.in);
 			outputPath = sc.next();
 		}
-
+		
+		/* Utiliser pour append le contenus des template dans un fichier*/
+		/*
+		appendToFileJava11("100");
+		appendToFileJava11("1000");
+		appendToFileJava11("10000");*/
+		
 		builderBase.append("--- Bienvenue dans notre moteur de requête RDF --- \n");
 		System.out.println(builderBase.toString());
 		builder.append("Options disponible (taper le chiffre correspondant à l'option) : \n" );
@@ -147,9 +159,7 @@ final class Main {
 				csv.add(String.valueOf(totalTimeCSV));
 				MainRDFHandler.writeToCSV(csv, "option_1_data_output");
 				
-				System.out.println(processorCSV.numberOfQueries());
-				System.out.println(processorCSV.numberOfDuplicates());
-				processorCSV.cleanDuplicates2();
+				processorCSV.cleanQueriesWithCommentary(10);
 				
 				System.out.println("Fin de l'option \n");
 				break;
@@ -355,4 +365,35 @@ final class Main {
 			
 		}
 	}
+	//Fonction pour append les template efficacement
+	// Java 11, writeString, append mode
+	  private static void appendToFileJava11(String number)
+				throws IOException {
+		  String[] fileList = {"Q_1_eligibleregion_",
+				  "Q_1_includes_",
+				  "Q_1_likes_",
+				  "Q_1_nationality_",
+				  "Q_1_subscribes_",
+				  "Q_2_includes_eligibleRegion_",
+				  "Q_2_likes_nationality_",
+				  "Q_2_subscribes_likes_",
+				  "Q_2_tag_homepage_",
+				  "Q_3_location_gender_type_",
+				  "Q_3_location_nationality_gender_",
+				  "Q_3_nationality_gender_type_",
+				  "Q_4_location_nationality_gender_type_"};
+		  Path pathToAdd = Path.of(workingDir +number +"/STAR_ALL_workload_"+number+".queryset");
+		  for(String name : fileList) {
+			  Path fileName = Path.of(workingDir +number +"/"+name+number+".queryset");
+			  
+		      // default StandardCharsets.UTF_8
+			  String content = Files.readString(fileName);
+		      Files.writeString(pathToAdd, content,StandardCharsets.UTF_8,
+		              StandardOpenOption.CREATE,
+		              StandardOpenOption.APPEND);
+		  }
+		  
+
+	  }
+
 }

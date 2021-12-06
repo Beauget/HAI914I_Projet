@@ -55,6 +55,42 @@ public class Processor {
 		}
 		return output;
 	}
+	public void cleanQueries(Integer percentage) {
+		cleanDuplicates();
+		cleanEmptyAnswers(percentage);
+	}
+	
+	public void cleanQueriesWithCommentary(Integer percentage) {
+		System.out.println("Number of queries before cleaning : "+numberOfQueries());
+		System.out.println("Number of empty queries before cleaning : "+numberOfNoAnswer());
+		cleanDuplicates();
+		System.out.println("Number of queries after choosing to have at most 1 duplicate : "+numberOfQueries());
+		System.out.println("Number of empty queries after choosing to have at most 1 duplicate : "+numberOfNoAnswer());
+		cleanEmptyAnswers(percentage);
+		System.out.println("Number of queries after leaving at most "+ percentage+"% empty queries : "+numberOfQueries());
+		System.out.println("Number of empty queries after leaving at most "+ percentage+"% empty queries :"+numberOfNoAnswer());
+
+	}
+	public String doQueries(){
+		double start = System.currentTimeMillis();
+		StringBuilder builder = new StringBuilder();
+		builder.append("Query , Answer(s) \n");
+		for(Query q : queries) {
+			List<String> answer = doAQuery(q);
+			if(answer!=null) {
+				if(answer.size()!=0) {
+					builder.append(q.getRealQuery()+" ,");
+					for(String s :answer) {
+					builder.append(s.toString()+" ");
+					}
+					builder.append("\n");
+				}
+			}				
+		}
+		double end = System.currentTimeMillis();
+		execQuery += ((end - start) / 1000);
+		return builder.toString();
+	}
 	/*
 	 * @return une hashMap contenant les queries et leur nombre d'apparition
 	 */
@@ -96,11 +132,9 @@ public class Processor {
 	 */
 	public void cleanDuplicates2() {
 		List<Query> queriesToRemove = queriesDuplicatesArrayList();
-		System.out.println(queriesToRemove.toString());
 		for(Query q : queriesToRemove) {
 			queries.remove(q);
 		}
-		System.out.println(queries.toString());
 	}
 	
 	/*
@@ -124,27 +158,36 @@ public class Processor {
 				}
 			}
 		}
-		System.out.println(queries.toString());
 	}
-	public String doQueries(){
-		double start = System.currentTimeMillis();
-		StringBuilder builder = new StringBuilder();
-		builder.append("Query , Answer(s) \n");
-		for(Query q : queries) {
-			List<String> answer = doAQuery(q);
-			if(answer!=null) {
-				if(answer.size()!=0) {
-					builder.append(q.getRealQuery()+" ,");
-					for(String s :answer) {
-					builder.append(s.toString()+" ");
-					}
-					builder.append("\n");
-				}
-			}				
+	/*
+	 * @return void sert a limiter le nombre de réponse vide au plus le pourcentage donné
+	 */
+	
+	public void cleanEmptyAnswers(double percentage){
+		Integer numberOfQueries = numberOfQueries();
+		Integer numberOfNoAnswer = numberOfNoAnswer();
+		//On vérifie si la liste de requetes renvois au moins une bonne réponse
+		if(!(numberOfQueries==numberOfNoAnswer)) {
+			/*produit en croix pour obtenir le nombre de requette vide à ajouter : 
+			 * ex : 10%
+			 * (nbNonVide*0,1)/(0,9)  , -1 du à l'arrondit de int
+			 */
+			Integer howManyEmptyAnswerAllowed = (int) (percentage/100 * (numberOfQueries()-numberOfNoAnswer)/(1-(percentage/100)))-1;
+			for (Iterator<Query> qs = queries.iterator(); qs.hasNext();) {
+				Query query = qs.next();
+				List<String> answer = doAQuery(query);
+			    if (answer==null) {
+			    	if(howManyEmptyAnswerAllowed<0) {
+			    		qs.remove();
+			    	}
+			    	else {//pour eviter de faire de -1 à l'infini
+			    		howManyEmptyAnswerAllowed--;
+			    	}
+			    }
+			}
 		}
-		double end = System.currentTimeMillis();
-		execQuery += ((end - start) / 1000);
-		return builder.toString();
+		else
+			System.err.println("All the queries have empty answer ! ");
 	}
 	
 	public double getExecQuery() {
