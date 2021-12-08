@@ -64,11 +64,11 @@ public class Processor {
 		System.out.println("Number of queries before cleaning : "+numberOfQueries());
 		System.out.println("Number of empty queries before cleaning : "+numberOfNoAnswer());
 		cleanDuplicates();
-		System.out.println("Number of queries after choosing to have at most 1 duplicate : "+numberOfQueries());
-		System.out.println("Number of empty queries after choosing to have at most 1 duplicate : "+numberOfNoAnswer());
+		//System.out.println("Number of queries after choosing to have at most 1 duplicate : "+numberOfQueries());
+		//System.out.println("Number of empty queries after choosing to have at most 1 duplicate : "+numberOfNoAnswer());
 		cleanEmptyAnswers(percentage);
-		System.out.println("Number of queries after leaving at most "+ percentage+"% empty queries : "+numberOfQueries());
-		System.out.println("Number of empty queries after leaving at most "+ percentage+"% empty queries :"+numberOfNoAnswer());
+		System.out.println("Number of queries after leaving at most "+ percentage+"% empty queries and at most "+ percentage+"% empty queries : "+numberOfQueries());
+		//System.out.println("Number of empty queries after leaving at most "+ percentage+"% empty queries :"+numberOfNoAnswer());
 
 	}
 	public String doQueries(){
