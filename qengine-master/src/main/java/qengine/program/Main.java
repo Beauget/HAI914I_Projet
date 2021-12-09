@@ -65,8 +65,8 @@ final class Main {
 	 */
 	//static String queryFile = workingDir + "STAR_ALL_workload.queryset";
 	//static String queryFile = workingDir + "/1000/STAR_ALL_workload_1000.queryset";
-	//static String queryFile = workingDir + "/100/STAR_ALL_workload_100.queryset";
-	static String queryFile = workingDir + "/10000/STAR_ALL_workload_10000.queryset";
+	static String queryFile = workingDir + "/100/STAR_ALL_workload_100.queryset";
+	//static String queryFile = workingDir + "/10000/STAR_ALL_workload_10000.queryset";
 	//static String queryFile = workingDir + "test.queryset";
 
 	/**

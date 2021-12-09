@@ -12,6 +12,7 @@ import qengine.program.abstract_models.Dictionary;
 public class DictionaryHashMap extends Dictionary {
 	
 	private HashMap<Integer,String> dictionary= new HashMap<Integer,String>();
+	private HashMap<String,Integer> dictionaryInv= new HashMap<String,Integer>();
 	static double execDictionnary = 0;
 	
 	public DictionaryHashMap(){
@@ -31,7 +32,7 @@ public class DictionaryHashMap extends Dictionary {
 		boolean object = false;
 		Integer [] toAdd = {0,0,0};			
 		int subjectIndex = 0 , predicateIndex= 0, objectIndex = 0;
-
+		/*
 		 Iterator it = dictionary.entrySet().iterator();
 		 
 		 while (it.hasNext()) {
@@ -54,34 +55,49 @@ public class DictionaryHashMap extends Dictionary {
 					object = true;
 					objectIndex = key;
 				}
-		 }	
-		
+		 }	*/
+		 if(dictionaryInv.get(st.getSubject().toString())!=null){
+			 subject=true;
+			 subjectIndex= dictionaryInv.get(st.getSubject().toString());
+		 }
+		 if(dictionaryInv.get(st.getPredicate().toString())!=null){
+			 predicate=true;
+			 predicateIndex = dictionaryInv.get(st.getPredicate().toString());
+		 }
+		 if(dictionaryInv.get(st.getObject().toString())!=null){
+			object = true;
+			objectIndex = dictionaryInv.get(st.getObject().toString());
+		 }
 			
-			if(!subject) {
-				Integer compteurHm = dictionary.size()+1;
-				dictionary.put(compteurHm, st.getSubject().toString());
-				toAdd[0] = compteurHm;
+		if(!subject) {
+			Integer compteurHm = dictionary.size()+1;
+			dictionary.put(compteurHm, st.getSubject().toString());
+			dictionaryInv.put(st.getSubject().toString(),compteurHm);
+			toAdd[0] = compteurHm;
+		}
+		else
+			toAdd[0] = subjectIndex;
+		
+		if(!predicate) {
+			Integer compteurHm = dictionary.size()+1;
+			dictionary.put(compteurHm,st.getPredicate().toString());
+			dictionaryInv.put(st.getPredicate().toString(),compteurHm);
+			toAdd[1] = compteurHm;
 			}
-			else
-				toAdd[0] = subjectIndex;
-			if(!predicate) {
-				Integer compteurHm = dictionary.size()+1;
-				dictionary.put(compteurHm,st.getPredicate().toString());
-				toAdd[1] = compteurHm;
-
-			}
-			else
-				toAdd[1] = predicateIndex;
-			if(!object) {
-				Integer compteurHm = dictionary.size()+1;
-				dictionary.put(compteurHm,st.getObject().toString());
-				toAdd[2]= compteurHm;
-			}
-			else
-				toAdd[2]= objectIndex;
-			double end = System.currentTimeMillis();
-			execDictionnary += (end - start);
-			return toAdd;
+		else
+			toAdd[1] = predicateIndex;
+		
+		if(!object) {
+			Integer compteurHm = dictionary.size()+1;
+			dictionary.put(compteurHm,st.getObject().toString());
+			dictionaryInv.put(st.getObject().toString(),compteurHm);
+			toAdd[2]= compteurHm;
+		}
+		else
+			toAdd[2]= objectIndex;
+		double end = System.currentTimeMillis();
+		execDictionnary += (end - start);
+		return toAdd;
 	}
 	public Integer getKey(String s) {
 	 for ( Entry<Integer, String> entry : dictionary.entrySet()) {
