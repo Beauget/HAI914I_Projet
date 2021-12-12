@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import arq.query;
 import qengine.program.abstract_models.Dictionary;
@@ -20,6 +21,8 @@ public class Processor {
 	  Dictionary dictionary;
 	  ArrayList<Index> indexes;
 	  ArrayList<Query> queries;
+	  Select s = new Select("?","IAM","EMPTY");
+	  Query emptyQuery = new Query(s);
 	
 	  double execQuery = 0;
 	  double execQueryWrite = 0;
@@ -59,6 +62,10 @@ public class Processor {
 		cleanDuplicates();
 		cleanEmptyAnswers(percentage);
 	}
+	public void cleanQueries() {
+		cleanDuplicates();
+		cleanEmptyAnswers();
+	}
 	
 	public void cleanQueriesWithCommentary(Integer percentage) {
 		System.out.println("Number of queries before cleaning : "+numberOfQueries());
@@ -71,6 +78,63 @@ public class Processor {
 		//System.out.println("Number of empty queries after leaving at most "+ percentage+"% empty queries :"+numberOfNoAnswer());
 
 	}
+	
+	public ArrayList<Query> doParameters(Integer totalNumberOfQueries,Integer percentageOfEmpty, Integer percentageOfDuplicate) {
+		ArrayList<Query> output = new ArrayList<Query>();
+		
+		if(percentageOfEmpty+percentageOfDuplicate<100) {		
+			Integer numberOfCleanQueriesNeeded = totalNumberOfQueries* (100-(percentageOfEmpty+percentageOfDuplicate))/100;
+			Integer numberOfEmptyQueries = totalNumberOfQueries* percentageOfEmpty/100;
+			Integer numberOfduplicateQueries = totalNumberOfQueries* percentageOfDuplicate/100;
+			
+			if(numberOfQueries()>=numberOfCleanQueriesNeeded) {
+				for (int i = 0; i <numberOfCleanQueriesNeeded; i++) {
+					output.add(queries.get(i));
+				}
+				
+				output = addDuplicates(numberOfduplicateQueries,output);
+				output = addEmptyQueries(numberOfEmptyQueries,output);
+				
+				return output;
+				
+			}
+			
+			else {System.out.println("Not enought clean queries to apply the parameters");}
+				
+			}
+		else {
+			System.out.println("Empty queries and duplicates takes more than 100% of the total and we don't mix the two of them");
+		}
+		return null;
+	}
+	
+	/*
+	 * @return void,ajoute une queriy random de queries xfois suivant le pourcentage
+	 */	
+	private ArrayList<Query> addDuplicates(Integer numberOfTimes, ArrayList<Query> q) {
+		//Integer numberOfDuplicatesToAdd= (numberOfQueries()*100) / (100-percentage) - numberOfQueries();
+		for (int i = 0; i < numberOfTimes; i++) {
+			Random random = new Random();
+			int nb;
+			nb = random.nextInt(q.size());
+			q.add(q.get(nb));			
+		}
+		return q;		
+	}
+	
+	/*
+	 * @return void,ajoute la meme empty query dans queries xfois suivant le pourcentage
+	 */
+	
+	private ArrayList<Query> addEmptyQueries(Integer numberOfTimes, ArrayList<Query> q) {
+		//Integer numberOfEmptyToAdd= (numberOfQueries()*100) / (100-percentage) - numberOfQueries();
+		
+		for (int i = 0; i < numberOfTimes; i++) {
+			q.add(emptyQuery);			
+		}
+		return q;
+	}
+	
 	public String doQueries(){
 		double start = System.currentTimeMillis();
 		StringBuilder builder = new StringBuilder();

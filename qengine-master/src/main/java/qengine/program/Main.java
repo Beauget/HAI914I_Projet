@@ -111,7 +111,15 @@ final class Main {
 		}
 		HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates("100");
 		ArrayList<Processor> allProcessors = allTemplatesProcessor(allQueries);
-		System.out.println(allProcessors.get(0).toString());
+		System.out.println(allProcessors.get(0).numberOfQueries());
+		ArrayList<Query> benchmark = allProcessors.get(0).doParameters(30,10, 30);
+		if(benchmark!=null)
+			System.out.println(benchmark.size());
+		/*
+		 * 		for(Query q :queries) {
+			builder.append("\n\n"+q.toString());
+		}
+		 */
 		
 		/* Utiliser pour append le contenus des template dans un fichier*/
 		
@@ -446,8 +454,7 @@ final class Main {
 				 ArrayList<Query> value  = (ArrayList<Query>) entry.getValue();
 				 
 				 Processor p = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), value);
-				 p.cleanDuplicates();
-				 p.cleanEmptyAnswers();
+				 p.cleanQueries();
 				 output.add(p);
 			 }
 		  return output;

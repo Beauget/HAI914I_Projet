@@ -6,8 +6,13 @@ public class Query {
 	String realQuery;
 	ArrayList<Select> query = new ArrayList<Select>();
 	
-	public Query(String rQ) {
-		this.realQuery = rQ;
+	public Query(String s) {
+		this.realQuery = s;
+	}
+	
+	public Query(Select s) {
+		realQuery = s.toString();
+		this.query.add(s);
 	}
 	
 	
