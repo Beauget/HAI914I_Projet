@@ -47,7 +47,17 @@ public class Select {
 
 	@Override
 	public String toString() {
-		return "Select [subject=" + getSubject() + ", predicate=" + getPredicate() + ", object=" + getObject() + "]";
+		StringBuilder builder = new StringBuilder();
+		for(String s : select) {
+			if(s.equals("?")) {
+				builder.append("?v0 ");
+			}
+			else {
+				builder.append("<"+s+"> ");
+			}
+		}
+		builder.append(". ");
+		return builder.toString();
 	}
 
 

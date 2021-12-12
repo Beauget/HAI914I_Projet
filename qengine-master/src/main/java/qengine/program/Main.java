@@ -10,8 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -107,6 +109,9 @@ final class Main {
 			sc = new Scanner(System.in);
 			outputPath = sc.next();
 		}
+		HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates("100");
+		ArrayList<Processor> allProcessors = allTemplatesProcessor(allQueries);
+		System.out.println(allProcessors.get(0).toString());
 		
 		/* Utiliser pour append le contenus des template dans un fichier*/
 		
@@ -397,6 +402,55 @@ final class Main {
 		  }
 		  
 
+	  }
+	  
+	  private static HashMap<String,ArrayList<Query>> getAllTemplates(String number) throws FileNotFoundException, IOException{
+		  HashMap<String,ArrayList<Query>> output = new HashMap<String,ArrayList<Query>>();
+		  String[] fileList = {
+				  "Q_1_eligibleregion_",
+				  "Q_1_includes_",
+				  "Q_1_likes_",
+				  "Q_1_nationality_",
+				  "Q_1_subscribes_",
+				  "Q_2_includes_eligibleRegion_",
+				  "Q_2_likes_nationality_",
+				  "Q_2_subscribes_likes_",
+				  "Q_2_tag_homepage_",
+				  "Q_3_location_gender_type_",
+				  "Q_3_location_nationality_gender_",
+				  "Q_3_nationality_gender_type_",
+				  "Q_4_location_nationality_gender_type_"
+				  };
+		  Path pathToAdd = Path.of(workingDir +number +"/STAR_ALL_workload_"+number+".queryset");
+		  for(String name : fileList) {
+			  queryFile = workingDir +number +"/"+name+number+".queryset";
+			  ArrayList<Query> array = parseQueries();
+			  output.put(name+number, array);
+		  }
+		  return output;
+	  }
+	  
+	  /*
+	   * @return Renvoie une array de processor qui sont clean ;
+	  */
+	  
+	  private static ArrayList<Processor> allTemplatesProcessor(HashMap<String,ArrayList<Query>> hashmap) throws FileNotFoundException, IOException{
+		  ArrayList<Processor> output = new ArrayList<Processor>();
+		  parseData();
+			 Iterator it = hashmap.entrySet().iterator();
+			 
+			 while (it.hasNext()) {
+				 
+				 HashMap.Entry entry = (Entry) it.next();
+				 //String key =  (String) ((Entry) hashmap).getKey();
+				 ArrayList<Query> value  = (ArrayList<Query>) entry.getValue();
+				 
+				 Processor p = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), value);
+				 p.cleanDuplicates();
+				 p.cleanEmptyAnswers();
+				 output.add(p);
+			 }
+		  return output;
 	  }
 
 }

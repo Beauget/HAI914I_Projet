@@ -110,18 +110,17 @@ public class Processor {
 		}
 		return mapQueries;
 	}
-	
+	/*
+	 * @return tout les duplicats
+	 */
 	public List<Query> queriesDuplicatesArrayList(){
 		ArrayList output = new ArrayList();
 		for(int i=0 ; i< queries.size()-1; i++) {
 			Integer numberOfDuplicate = 0;
 			for(int j=i+1 ; j< queries.size();j++) {
 				if(queries.get(i).equals(queries.get(j))) {	
-					numberOfDuplicate++;
-					//c'est le 3+ doublon que je trouve, je l'ajoute a la liste de query à supprimer
-					if(numberOfDuplicate>1) {
-						output.add(queries.get(j));	
-					}
+					output.add(queries.get(j));	
+				
 				}
 			}
 		}
@@ -188,6 +187,20 @@ public class Processor {
 		}
 		else
 			System.err.println("All the queries have empty answer ! ");
+	}
+	
+	/*
+	 * @return rien , supprime toute les query avec une réponse null
+	 */
+	public void cleanEmptyAnswers(){
+		for (Iterator<Query> qs = queries.iterator(); qs.hasNext();) {
+			Query query = qs.next();
+			List<String> answer = doAQuery(query);
+			   if (answer==null) {
+			   	qs.remove();
+			   }
+		}
+
 	}
 	
 	public double getExecQuery() {
@@ -323,5 +336,15 @@ public class Processor {
 		double end = System.currentTimeMillis();
 		execQueryWrite += (end - start);
 		}
+	
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		
+		for(Query q :queries) {
+			builder.append("\n\n"+q.toString());
+		}
+		
+		return builder.toString();
+	}
 	
 }

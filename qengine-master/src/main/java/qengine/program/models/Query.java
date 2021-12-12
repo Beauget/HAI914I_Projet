@@ -48,10 +48,11 @@ public class Query {
 
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		
+		builder.append("SELECT ?v0 WHERE {\n");
 		for(Select s : query) {
-			builder.append(s.toString()+"\n");
+			builder.append(s.toString());
 		}
+		builder.append("\n}");
 		
 		return builder.toString();
 	}
