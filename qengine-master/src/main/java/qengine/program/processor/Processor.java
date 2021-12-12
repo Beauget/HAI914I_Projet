@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import arq.query;
 import qengine.program.abstract_models.Dictionary;
 import qengine.program.abstract_models.Index;
@@ -21,8 +23,7 @@ public class Processor {
 	  Dictionary dictionary;
 	  ArrayList<Index> indexes;
 	  ArrayList<Query> queries;
-	  Select s = new Select("?","IAM","EMPTY");
-	  Query emptyQuery = new Query(s);
+
 	
 	  double execQuery = 0;
 	  double execQueryWrite = 0;
@@ -130,6 +131,8 @@ public class Processor {
 		//Integer numberOfEmptyToAdd= (numberOfQueries()*100) / (100-percentage) - numberOfQueries();
 		
 		for (int i = 0; i < numberOfTimes; i++) {
+			  Select s = new Select("?",randStringUsingApache(),randStringUsingApache());
+			  Query emptyQuery = new Query(s);
 			q.add(emptyQuery);			
 		}
 		return q;
@@ -411,4 +414,10 @@ public class Processor {
 		return builder.toString();
 	}
 	
+	public String randStringUsingApache() {	 
+	    int length = 10;
+	    boolean useLetters = true;
+	    boolean useNumbers = true;
+	    return RandomStringUtils.random(length, useLetters, useNumbers);
+	}
 }

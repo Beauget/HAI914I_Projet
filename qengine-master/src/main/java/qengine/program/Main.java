@@ -2,6 +2,7 @@ package qengine.program;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
@@ -111,15 +112,30 @@ final class Main {
 		}
 		HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates("100");
 		ArrayList<Processor> allProcessors = allTemplatesProcessor(allQueries);
-		System.out.println(allProcessors.get(0).numberOfQueries());
-		ArrayList<Query> benchmark = allProcessors.get(0).doParameters(30,10, 30);
-		if(benchmark!=null)
-			System.out.println(benchmark.size());
-		/*
-		 * 		for(Query q :queries) {
-			builder.append("\n\n"+q.toString());
+		//System.out.println(allProcessors.get(0).numberOfQueries());
+		
+		ArrayList<Query> benchmark = new ArrayList<Query>();
+		for(Processor p: allProcessors) {
+			ArrayList<Query> toAdd =p.doParameters(30,10, 30);
+			if(toAdd!=null) {
+				benchmark.addAll(toAdd);
+			}
+			else {
+				System.out.println("One template could not be used !");
+			}
 		}
-		 */
+
+		if(benchmark!=null ) {
+			System.out.println(benchmark.size());
+			writeBenchmark(benchmark,"Benchmark_"+System.currentTimeMillis());
+		}
+		
+		/*
+		for(Query q :benchmark) {			
+			System.out.println("\n\n"+q.toString());
+		}
+		*/
+		 
 		
 		/* Utiliser pour append le contenus des template dans un fichier*/
 		
@@ -459,5 +475,28 @@ final class Main {
 			 }
 		  return output;
 	  }
+	  
+		public static void writeBenchmark(ArrayList<Query> benchmark , String name) {
+			StringBuilder builder = new StringBuilder();
+			String path = outputPath+"Benchmark/" + name + ".queryset";
+			for(Query q :benchmark) {			
+				builder.append("\n\n"+q.toString());
+			}
+			FileWriter fw = null;
+
+				try {
+					fw = new FileWriter(path);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}  	   
+				try {
+					fw.write(builder.toString());
+					fw.close();
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 
 }
