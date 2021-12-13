@@ -1,5 +1,6 @@
 package qengine.program;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -93,7 +94,7 @@ final class Main {
 		StringBuilder builderBase = new StringBuilder();
 		StringBuilder builder = new StringBuilder();
 		StringBuilder toPath = new StringBuilder();
-		
+		/*
 		System.out.println("Veuillez entrer le path du fichier contenant les requêtes sparql(si vous souhaitez tester le code avec "+
 				"STAR_ALL_workload.queryset et 100K.nt écrire \"defaut\")");
 
@@ -109,40 +110,42 @@ final class Main {
 
 			sc = new Scanner(System.in);
 			outputPath = sc.next();
-		}
-		HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates("100");
-		ArrayList<Processor> allProcessors = allTemplatesProcessor(allQueries);
-		//System.out.println(allProcessors.get(0).numberOfQueries());
-		
-		ArrayList<Query> benchmark = new ArrayList<Query>();
-		for(Processor p: allProcessors) {
-			ArrayList<Query> toAdd =p.doParameters(30,10, 30);
-			if(toAdd!=null) {
-				benchmark.addAll(toAdd);
-			}
-			else {
-				System.out.println("One template could not be used !");
-			}
-		}
+		}*/
+		System.out.println("--- Bienvenue dans notre moteur de requête RDF ---");
+		System.out.println("Please make sure to have all the templates you want to use in data/queryset");
+		System.out.println("Write the name of the rdf file you want to use (must be in data/rdf) :");
 
-		if(benchmark!=null ) {
-			System.out.println(benchmark.size());
-			writeBenchmark(benchmark,"Benchmark_"+System.currentTimeMillis());
+		Scanner sc = new Scanner(System.in);
+		dataFile = workingDir + "rdf/"+sc.next();
+
+		System.out.println("Creating the dictionary and getting the templates....:");
+		
+		HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates();
+		ArrayList<Processor> allProcessors = allTemplatesProcessor(allQueries);
+		
+		System.out.println("There is " + allQueries.size()+ " template(s) available :");
+		
+		Iterator it = allQueries.entrySet().iterator();	
+		Integer x = 0;
+		while (it.hasNext()) {			 
+			HashMap.Entry en = (Entry) it.next();
+			System.out.println(x+" :"+en.getKey());	
+			x++;
 		}
 		
-		/*
-		for(Query q :benchmark) {			
-			System.out.println("\n\n"+q.toString());
+		ArrayList<Query> benchmark = createBenchmark(allProcessors,allQueries.size());
+		if(benchmark!=null ) {
+			System.out.println("The number may be a little of because of the divisions => Real benchmark size : "+benchmark.size());
+			String benchmarkName = "Benchmark_"+System.currentTimeMillis();
+			writeBenchmark(benchmark,"Benchmark_"+benchmarkName);
+			System.out.println(benchmarkName+ " created! You can view it in output/Benchmark");
 		}
-		*/
-		 
 		
 		/* Utiliser pour append le contenus des template dans un fichier*/
 		
 		//appendToFileJava11("100");
 		//appendToFileJava11("1000");
 		//appendToFileJava11("10000");
-		
 		builderBase.append("--- Bienvenue dans notre moteur de requête RDF --- \n");
 		System.out.println(builderBase.toString());
 		builder.append("Options disponible (taper le chiffre correspondant à l'option) : \n" );
@@ -498,5 +501,107 @@ final class Main {
 					e.printStackTrace();
 				}
 			}
+		
+		public static HashMap<String,ArrayList<Query>> getAllTemplates() throws FileNotFoundException, IOException {
+			File directory= new File(workingDir+"queryset/");
+			HashMap<String,ArrayList<Query>> output = new HashMap<String,ArrayList<Query>>();
+			for (File file : directory.listFiles())
+			{
+				if (!file.isDirectory()&&file.getName().endsWith(".queryset")) {
+	  			  	queryFile = workingDir+"queryset/"+file.getName();
+	  			  	ArrayList<Query> array = parseQueries();
+	  			  	output.put(file.getName(), array);
+	            } 
+
+			}
+			return output;
+		}
+		
+		public static ArrayList<Query> createBenchmark(ArrayList<Processor> allProcessors,Integer numberOfTemplates){
+			ArrayList<Processor> processorsUsed = new ArrayList<Processor>();
+			Scanner sc = new Scanner(System.in);
+			
+			Integer x=0;
+			while((x==0)||(x>numberOfTemplates)) {
+				System.out.println("How many templates do you want to use ? :");
+				sc = new Scanner(System.in);
+				x= Integer.parseInt(sc.next());
+			}
+			System.out.println("Use the number beside the template name to refer to it.");
+			for (int i = 0; i < x; i++) {
+				int template = -1;
+				System.out.println("Choose a number for the next template");
+				while(template==-1||template>(numberOfTemplates-1)) {
+					sc = new Scanner(System.in);
+					template= Integer.parseInt(sc.next());
+				}
+				processorsUsed.add(allProcessors.get(template));
+				System.out.println("Template number "+template+ " added");
+			}	
+			
+			Integer percentageOfEmptyQueries = 100;
+			Integer percentageOfDuplicates= 100;
+			
+			while(percentageOfEmptyQueries+percentageOfDuplicates>99) {
+				x=-1;
+				while(x<0||x>99) {
+					System.out.println("Choose a percentage of empty query for the benchmark");
+					sc = new Scanner(System.in);
+					x= Integer.parseInt(sc.next());
+				}
+				percentageOfEmptyQueries=x;
+				x=-1;
+				while(x<0||x>99) {
+					System.out.println("Choose a percentage of duplicates");
+					sc = new Scanner(System.in);
+					x= Integer.parseInt(sc.next());
+				}
+				percentageOfDuplicates=x;
+			}
+			Integer maxBenchmarkSize = ((maxNumberOfQueriesYouCanUse(processorsUsed)*100)/
+					(100-(percentageOfDuplicates+percentageOfEmptyQueries)))
+					*processorsUsed.size();
+			System.out.println(maxNumberOfQueriesYouCanUse(processorsUsed)*100);
+			System.out.println(100-(percentageOfDuplicates+percentageOfEmptyQueries));
+			System.out.println(processorsUsed.size());
+			x=0;
+			while(x<processorsUsed.size()||x>maxBenchmarkSize) {
+				System.out.println("What is the desired size of the benchmark ? (must not be over "+maxBenchmarkSize+")");
+				sc = new Scanner(System.in);
+				x= Integer.parseInt(sc.next());
+			}
+			Integer numberOfQueriesToGetFromEachTemplate = x/processorsUsed.size();
+			
+			ArrayList<Query> benchmark = new ArrayList<Query>();
+			for(Processor p: processorsUsed) {
+				ArrayList<Query> toAdd =p.doParameters(numberOfQueriesToGetFromEachTemplate,percentageOfEmptyQueries, percentageOfDuplicates);
+				if(toAdd!=null) {
+					benchmark.addAll(toAdd);
+				}
+				else {
+					System.out.println("One template could not be used !");
+				}
+			}
+			return benchmark;	
+		}
+		
+		public boolean isThereEnoughQueriesInEachTemplate(ArrayList<Processor> processors, Integer numberOfQueriesNeeded) {
+			for(Processor p : processors) {
+				if(p.numberOfQueries()<numberOfQueriesNeeded) {
+					return false;
+				}
+			}
+			return true;
+		}
+		
+		public static Integer maxNumberOfQueriesYouCanUse(ArrayList<Processor> processors) {
+			Integer max =-1;
+			for(Processor p : processors) {
+				if(p.numberOfQueries()<max||max==-1) {
+					max = p.numberOfQueries();
+				}
+			}
+			return max;
+		}
 
 }
