@@ -370,7 +370,7 @@ final class Main {
 			Scanner sc = new Scanner(System.in);
 			while(option.equals("option1")) {
 				System.out.println("Please make sure to have all the templates you want to use in .../data/queryset/");
-				System.out.println("Write the name of the rdf file you want to use (must be in .../data/rdf/) :");
+				System.out.println("Write the name of the rdf file (and its extension) you want to use (must be in .../data/rdf/) :");
 		
 				sc = new Scanner(System.in);
 				dataFile = workingDir + "rdf/"+sc.next();
@@ -378,7 +378,8 @@ final class Main {
 				System.out.println("Creating the dictionary and getting the templates....:");			
 				HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates();
 				ArrayList<Processor> allProcessors = allTemplatesProcessor(allQueries);
-				while(option.equals("option1")) {
+				option = "option1RDF";
+				while(option.equals("option1RDF")) {
 					System.out.println("There is " + allQueries.size()+ " template(s) available :");
 					
 					Iterator it = allQueries.entrySet().iterator();	
@@ -396,11 +397,12 @@ final class Main {
 					}
 					option = "nextChoice";
 					while(option.equals("nextChoice")) {
-						System.out.println("Do you want to quit ? y/n");
+						System.out.println("\n1: Create a new benchmark from the same rdf \n2 : Restart from the choosing the rdf file \nq : Exit the option \n");
 						sc = new Scanner(System.in);
 						option = sc.next();
-						if(option.equals("y")) {option="quit";}
-						else if(option.equals("n")) {option="option1";}
+						if(option.equals("q")) {option="quit";}
+						else if(option.equals("1")) {option="option1RDF";}
+						else if(option.equals("2")) {option="option1";}
 						else {option="nextChoice";}
 					}
 				}			
