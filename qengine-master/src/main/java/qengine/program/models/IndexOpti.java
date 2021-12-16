@@ -73,6 +73,10 @@ public class IndexOpti extends Index{
 	public static double getExecIndex() {
 		return execIndex;
 	}
+	
+	public static void resetExecIndex() {
+		execIndex=0;
+	}
 
 	public   List<Integer> getAnswer(Integer first,Integer second) {
 		if(index.get(first)!=null) {

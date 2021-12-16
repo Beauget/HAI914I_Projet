@@ -250,17 +250,14 @@ final class Main {
 	  private static ArrayList<Processor> allTemplatesProcessor(HashMap<String,ArrayList<Query>> hashmap) throws FileNotFoundException, IOException{
 		  ArrayList<Processor> output = new ArrayList<Processor>();
 		  parseData();
-			 Iterator it = hashmap.entrySet().iterator();
-			 
-			 while (it.hasNext()) {
-				 
-				 HashMap.Entry entry = (Entry) it.next();
-				 //String key =  (String) ((Entry) hashmap).getKey();
-				 ArrayList<Query> value  = (ArrayList<Query>) entry.getValue();
-				 
-				 Processor p = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), value);
-				 p.cleanQueries();
-				 output.add(p);
+		  Iterator it = hashmap.entrySet().iterator(); 
+		  while (it.hasNext()) {	 
+			  HashMap.Entry entry = (Entry) it.next();
+			 //String key =  (String) ((Entry) hashmap).getKey();
+			  ArrayList<Query> value  = (ArrayList<Query>) entry.getValue(); 
+			  Processor p = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), value);
+			  p.cleanQueries();
+			  output.add(p);
 			 }
 		  return output;
 	  }
@@ -411,6 +408,7 @@ final class Main {
 		
 		public static void option2() throws FileNotFoundException, IOException{
 			while(option.equals("option2")) {
+				chooseQueryset();
 				int cmd = 999;
 				StringBuilder builderBase = new StringBuilder();
 				StringBuilder builder = new StringBuilder();
@@ -431,6 +429,8 @@ final class Main {
 					builder.append("\n9 : Toute les données des options précédentes (AVEC ECRITURE)");
 					builder.append("\n0 : Quittez l'application");
 					while(cmd != 0) {
+						DictionaryHashMap.resetTimeDictionnary();
+						IndexOpti.resetExecIndex();
 						System.out.println(builder.toString());
 						cmd = sc.nextInt();
 						
@@ -587,6 +587,31 @@ final class Main {
 					}
 				}
 			}
+		}
+		
+		private static void chooseQueryset() throws FileNotFoundException, IOException {
+			System.out.println("Please make sure to have all the templates you want to use in .../data/queryset/");
+			System.out.println("Write the name of the rdf file (and its extension) you want to use (must be in .../data/rdf/) :");
+	
+			Scanner sc = new Scanner(System.in);
+			dataFile = workingDir + "rdf/"+sc.next();
+			System.out.println("Getting the templates....:");
+			HashMap<String,ArrayList<Query>> allQueries =  getAllTemplates();		
+			ArrayList<String> paths = new ArrayList<String>();
+			System.out.println("There is " + allQueries.size()+ " template(s) available :");		
+			Iterator it = allQueries.entrySet().iterator();	
+			Integer x = 0;
+			while (it.hasNext()) {			 
+				HashMap.Entry en = (Entry) it.next();
+				System.out.println(x+" :"+en.getKey());	
+				paths.add(workingDir+"/queryset/"+en.getKey());
+				x++;
+			}
+			
+			System.out.println("Please, write the number of the one you want to choose");
+			sc = new Scanner(System.in);
+			queryFile = paths.get(Integer.parseInt(sc.next()));
+
 		}
 
 }

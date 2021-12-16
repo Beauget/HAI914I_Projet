@@ -114,6 +114,10 @@ public class DictionaryHashMap extends Dictionary {
 		return execDictionnary;
 	}
 	
+	public static void resetTimeDictionnary() {
+		execDictionnary=0;
+	}
+	
 	public String getValue(Integer i) {
 		return dictionary.get(i);
 		}
