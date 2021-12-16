@@ -265,28 +265,7 @@ final class Main {
 		  return output;
 	  }
 	  
-		public static void writeBenchmark(ArrayList<Query> benchmark , String name) {
-			StringBuilder builder = new StringBuilder();
-			String path = outputPath+"Benchmark/" + name + ".queryset";
-			for(Query q :benchmark) {			
-				builder.append("\n\n"+q.toString());
-			}
-			FileWriter fw = null;
 
-				try {
-					fw = new FileWriter(path);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}  	   
-				try {
-					fw.write(builder.toString());
-					fw.close();
-				} 
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
 		
 		public static HashMap<String,ArrayList<Query>> getAllTemplates() throws FileNotFoundException, IOException {
 			File directory= new File(workingDir+"queryset/");
@@ -347,9 +326,6 @@ final class Main {
 			Integer maxBenchmarkSize = ((maxNumberOfQueriesYouCanUse(processorsUsed)*100)/
 					(100-(percentageOfDuplicates+percentageOfEmptyQueries)))
 					*processorsUsed.size();
-			System.out.println(maxNumberOfQueriesYouCanUse(processorsUsed)*100);
-			System.out.println(100-(percentageOfDuplicates+percentageOfEmptyQueries));
-			System.out.println(processorsUsed.size());
 			x=0;
 			while(x<processorsUsed.size()||x>maxBenchmarkSize) {
 				System.out.println("What is the desired size of the benchmark ? (must not be over "+maxBenchmarkSize+")");
@@ -413,10 +389,9 @@ final class Main {
 						x++;
 					}
 					Benchmark benchmark = createBenchmark(allProcessors,allQueries.size());
-					if(benchmark!=null ) {
-
-						writeBenchmark(benchmark.getQueries(),benchmark.getName());
-						System.out.println(benchmark.getName()+ " created! You can view it in .../output/Benchmark/");
+					if(benchmark.getQueries()!=null ) {
+						benchmark.writeBenchmark(outputPath);
+						System.out.println(benchmark.getName()+ " created! You can view it in .../output/");
 						System.out.println("The number may be a little off because of the divisions => Real benchmark size : "+benchmark.size());
 					}
 					option = "nextChoice";
@@ -484,11 +459,9 @@ final class Main {
 							double endCSV2 = System.currentTimeMillis();
 							totalTimeCSV = (endCSV2 - startCSV);
 							csv.add(String.valueOf(totalTimeCSV));
-							MainRDFHandler.writeToCSV(csv, "option_1_data_output");
-							
-							processorCSV.cleanQueriesWithCommentary(10);
-							
-							System.out.println("Fin de l'option \n");
+							String fileName = "option_1_data_output_"+System.currentTimeMillis();
+							MainRDFHandler.writeToCSV(csv, fileName);
+							System.out.println(fileName+" has been created ! End of the option\n");
 							break;
 							
 						case 2 : 
@@ -499,7 +472,7 @@ final class Main {
 							break;
 							
 						case 3 : 
-							System.out.println(" Création du dictionnaire et de l'index en cours..");
+							System.out.println("Création du dictionnaire et de l'index en cours..");
 							parseData();
 							double start = System.currentTimeMillis();
 							MainRDFHandler.writeDictionnary();
@@ -598,8 +571,9 @@ final class Main {
 							double endWrite2 = System.currentTimeMillis();
 							totalTimeCSV = (endWrite2 - startWrite);
 							csv.add(String.valueOf(totalTimeCSV));
-							MainRDFHandler.writeToCSV(csv, "option_8_data_output");
-							System.out.println("Fin de l'option \n");
+							fileName = "option_8_data_output_"+System.currentTimeMillis();
+							MainRDFHandler.writeToCSV(csv, fileName);
+							System.out.println(fileName+" has been created ! End of the option\n");
 							break;
 						case 0 : 
 							option="quit";
