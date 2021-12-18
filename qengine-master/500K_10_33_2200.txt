@@ -1,3 +1,6 @@
+//contient tous les templates
+////10%empty 33%duplicata  2200 requetes
+
 500K_10_33_2200.queryset
 
 Temps de création du dictionnaire (SANS ECRITURE) 733.0 ms 

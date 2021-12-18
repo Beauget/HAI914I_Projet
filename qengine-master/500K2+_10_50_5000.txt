@@ -1,3 +1,7 @@
+
+//Contient tous les templates avec 2+ triplet
+//10%empty 50%duplicata 5000 requetes
+
 500K2+_10_50_5000.queryset
 
 Temps de création du dictionnaire (SANS ECRITURE) 837.0 ms 
