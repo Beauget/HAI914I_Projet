@@ -131,7 +131,7 @@ public class Processor {
 		//Integer numberOfEmptyToAdd= (numberOfQueries()*100) / (100-percentage) - numberOfQueries();
 		
 		for (int i = 0; i < numberOfTimes; i++) {
-			  Select s = new Select("?",randStringUsingApache(),randStringUsingApache());
+			  Select s = new Select("?","http://purl.org/goodrelations/"+randStringUsingApache(),"http://db.uwaterloo.ca/~galuc/wsdbm"+randStringUsingApache());
 			  Query emptyQuery = new Query(s);
 			q.add(emptyQuery);			
 		}
@@ -155,7 +155,7 @@ public class Processor {
 			}				
 		}
 		double end = System.currentTimeMillis();
-		execQuery += ((end - start) / 1000);
+		execQuery += (end - start);
 		return builder.toString();
 	}
 	/*

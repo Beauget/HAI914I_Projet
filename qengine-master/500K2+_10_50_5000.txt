@@ -1,0 +1,26 @@
+500K2+_10_50_5000.queryset
+
+Temps de création du dictionnaire (SANS ECRITURE) 837.0 ms 
+Temps de création des index (SANS ECRITURE) 1806.0 ms 
+Temps de création et d'exécution des requêtes (SANS ECRITURE) 62321 ms 
+Temps d'exécution total de l'application : 69800.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 515.0 ms 
+Temps de création des index (SANS ECRITURE) 1584.0 ms 
+Temps de création et d'exécution des requêtes (SANS ECRITURE) 58691 ms 
+Temps d'exécution total de l'application : 63748.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 600.0 ms 
+Temps de création des index (SANS ECRITURE) 1441.0 ms 
+Temps de création et d'exécution des requêtes (SANS ECRITURE) 58924 ms 
+Temps d'exécution total de l'application : 63886.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 484.0 ms 
+Temps de création des index (SANS ECRITURE) 1562.0 ms 
+Temps de création et d'exécution des requêtes (SANS ECRITURE) 59188 ms 
+Temps d'exécution total de l'application : 64147.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 650.0 ms 
+Temps de création des index (SANS ECRITURE) 1429.0 ms 
+Temps de création et d'exécution des requêtes (SANS ECRITURE) 61006 ms 
+Temps d'exécution total de l'application : 65993.0 ms
