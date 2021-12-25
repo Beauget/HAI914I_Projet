@@ -1,0 +1,109 @@
+500K_emp_10_dup_50_4992
+
+
+-------VERSION 1-----------
+Temps de création du dictionnaire (SANS ECRITURE) 658.0 ms 
+Temps de création des index (SANS ECRITURE) 1609.0 ms 
+Temps de chargement des requetes 657.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 41375.0 ms 
+Temps d'exécution total de l'application : 47333.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 554.0 ms 
+Temps de création des index (SANS ECRITURE) 1455.0 ms 
+Temps de chargement des requetes 322.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 43275.0 ms 
+Temps d'exécution total de l'application : 48097.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 604.0 ms 
+Temps de création des index (SANS ECRITURE) 1389.0 ms 
+Temps de chargement des requetes 703.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 48166.0 ms 
+Temps d'exécution total de l'application : 53747.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 473.0 ms 
+Temps de création des index (SANS ECRITURE) 1421.0 ms 
+Temps de chargement des requetes 371.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 47781.0 ms 
+Temps d'exécution total de l'application : 52499.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 580.0 ms 
+Temps de création des index (SANS ECRITURE) 1543.0 ms 
+Temps de chargement des requetes 465.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 47571.0 ms 
+Temps d'exécution total de l'application : 52413.0 ms
+
+
+
+
+-------VERSION 2-----------
+
+Temps de création du dictionnaire (SANS ECRITURE) 689.0 ms 
+Temps de création des index (SANS ECRITURE) 1443.0 ms 
+Temps de chargement des requetes 464.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46989.0 ms 
+Temps d'exécution total de l'application : 52717.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 664.0 ms 
+Temps de création des index (SANS ECRITURE) 1375.0 ms 
+Temps de chargement des requetes 543.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 44951.0 ms 
+Temps d'exécution total de l'application : 50693.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 503.0 ms 
+Temps de création des index (SANS ECRITURE) 1494.0 ms 
+Temps de chargement des requetes 336.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 45669.0 ms 
+Temps d'exécution total de l'application : 50546.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 497.0 ms 
+Temps de création des index (SANS ECRITURE) 1397.0 ms 
+Temps de chargement des requetes 307.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46346.0 ms 
+Temps d'exécution total de l'application : 51221.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 449.0 ms 
+Temps de création des index (SANS ECRITURE) 1433.0 ms 
+Temps de chargement des requetes 360.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46830.0 ms 
+Temps d'exécution total de l'application : 51587.0 ms
+
+
+-------VERSION 3-----------
+
+
+Temps de création du dictionnaire (SANS ECRITURE) 760.0 ms 
+Temps de création des index (SANS ECRITURE) 1830.0 ms 
+Temps de chargement des requetes 601.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 40823.0 ms 
+Temps d'exécution total de l'application : 46744.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 613.0 ms 
+Temps de création des index (SANS ECRITURE) 1606.0 ms 
+Temps de chargement des requetes 518.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46391.0 ms 
+Temps d'exécution total de l'application : 51842.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 504.0 ms 
+Temps de création des index (SANS ECRITURE) 1461.0 ms 
+Temps de chargement des requetes 448.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46099.0 ms 
+Temps d'exécution total de l'application : 51268.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 531.0 ms 
+Temps de création des index (SANS ECRITURE) 1415.0 ms 
+Temps de chargement des requetes 355.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46063.0 ms 
+Temps d'exécution total de l'application : 50980.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 588.0 ms 
+Temps de création des index (SANS ECRITURE) 1410.0 ms 
+Temps de chargement des requetes 314.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46678.0 ms 
+Temps d'exécution total de l'application : 51471.0 ms
+
+Temps de création du dictionnaire (SANS ECRITURE) 530.0 ms 
+Temps de création des index (SANS ECRITURE) 1427.0 ms 
+Temps de chargement des requetes 394.0 ms 
+Tempsd'exécution des requêtes (SANS ECRITURE) 46312.0 ms 
+Temps d'exécution total de l'application : 51140.0 ms
+
