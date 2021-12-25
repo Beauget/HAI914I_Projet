@@ -217,32 +217,6 @@ final class Main {
 
 	  }
 	  
-	  private static HashMap<String,ArrayList<Query>> getAllTemplates(String number) throws FileNotFoundException, IOException{
-		  HashMap<String,ArrayList<Query>> output = new HashMap<String,ArrayList<Query>>();
-		  String[] fileList = {
-				  "Q_1_eligibleregion_",
-				  "Q_1_includes_",
-				  "Q_1_likes_",
-				  "Q_1_nationality_",
-				  "Q_1_subscribes_",
-				  "Q_2_includes_eligibleRegion_",
-				  "Q_2_likes_nationality_",
-				  "Q_2_subscribes_likes_",
-				  "Q_2_tag_homepage_",
-				  "Q_3_location_gender_type_",
-				  "Q_3_location_nationality_gender_",
-				  "Q_3_nationality_gender_type_",
-				  "Q_4_location_nationality_gender_type_"
-				  };
-		  Path pathToAdd = Path.of(workingDir +number +"/STAR_ALL_workload_"+number+".queryset");
-		  for(String name : fileList) {
-			  queryFile = workingDir +number +"/"+name+number+".queryset";
-			  ArrayList<Query> array = parseQueries();
-			  output.put(name+number, array);
-		  }
-		  return output;
-	  }
-	  
 	  /*
 	   * @return Renvoie une array de processor qui sont clean ;
 	  */
@@ -431,35 +405,36 @@ final class Main {
 					while(cmd != 0) {
 						DictionaryHashMap.resetTimeDictionnary();
 						IndexOpti.resetExecIndex();
-						System.out.println(builder.toString());
+						StringBuilder printTerminal = new StringBuilder();
+						System.out.println(builder.toString());						
 						cmd = sc.nextInt();
 						
 						switch(cmd) {
 						case 1 : 
 							System.out.println("Traitement en cours ...");
 							ArrayList<String> csv = new ArrayList<String>();
-							double startCSV = System.currentTimeMillis();
+							double start = System.currentTimeMillis();
 							parseData();
-							double startq = System.currentTimeMillis();
-							ArrayList<Query> queriesCSV = parseQueries();
-							double endq = System.currentTimeMillis();
-							Processor processorCSV = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesCSV);
-							processorCSV.doQueries();
-							double endCSV = System.currentTimeMillis();
-							double totalTimeCSV = (endCSV - startCSV);
+							double start2 = System.currentTimeMillis();
+							ArrayList<Query> queries = parseQueries();
+							double end2 = System.currentTimeMillis();
+							Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
+							processor.doQueries();
+							double end = System.currentTimeMillis();
+							double totalTimeCSV = (end- start);
 							System.out.println("Génération du csv ...");
 							csv.add(dataFile);
 							csv.add(queryFile);
 							csv.add(String.valueOf(MainRDFHandler.nbTriplet));
-							csv.add(String.valueOf(queriesCSV.size()));
+							csv.add(String.valueOf(queries.size()));
 							csv.add("NON_DISPONIBLE");
-							csv.add(String.valueOf(endq - startq));
+							csv.add(String.valueOf(end2 - start2));
 							csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
 							csv.add("6");
 							csv.add(String.valueOf(IndexOpti.getExecIndex()));
 							csv.add(String.valueOf(totalTimeCSV));
-							double endCSV2 = System.currentTimeMillis();
-							totalTimeCSV = (endCSV2 - startCSV);
+							double end3 = System.currentTimeMillis();
+							totalTimeCSV = (end3 - start);
 							csv.add(String.valueOf(totalTimeCSV));
 							String fileName = "option_1_data_output_"+System.currentTimeMillis();
 							MainRDFHandler.writeToCSV(csv, fileName);
@@ -476,9 +451,9 @@ final class Main {
 						case 3 : 
 							System.out.println("Création du dictionnaire et de l'index en cours..");
 							parseData();
-							double start = System.currentTimeMillis();
+							start = System.currentTimeMillis();
 							MainRDFHandler.writeDictionnary();
-							double end = System.currentTimeMillis();
+							end = System.currentTimeMillis();
 							double writeTime = DictionaryHashMap.getTimeDictionnary() + (end - start);
 							System.out.println("Temps de création du dictionnaire (AVEC ECRITURE dans /ouput " + writeTime + " ms");
 							System.out.println("Fin de l'option \n");
@@ -494,10 +469,10 @@ final class Main {
 							System.out.println(" Création du dictionnaire et de l'index en cours..");
 							parseData();
 							System.out.println("Écritures des données");
-							double startIndex = System.currentTimeMillis();
+							start = System.currentTimeMillis();
 							MainRDFHandler.writeIndex();
-							double endIndex = System.currentTimeMillis();
-							double writeTimeIndex = IndexOpti.getExecIndex() + (endIndex - startIndex );
+							end = System.currentTimeMillis();
+							double writeTimeIndex = IndexOpti.getExecIndex() + (end - start);
 							System.out.println("Temps de création des 6 index (AVEC ECRITURE dans /output et \n sans prise en compte du temps de création du dictionnaire) " + writeTimeIndex + " ms \n");
 							System.out.println("Fin de l'option \n");
 							break;
@@ -505,54 +480,66 @@ final class Main {
 							System.out.println(" Création du dictionnaire et de l'index en cours..");
 							parseData();
 							System.out.println("Requête(s) en cours");
-							ArrayList<Query> queries = parseQueries();
-							Processor processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
+							start2 = System.currentTimeMillis();
+							queries = parseQueries();
+							end2 = System.currentTimeMillis();
+							processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
 							processor.doQueries();
-							System.out.print("Temps de création et d'exécution des requêtes (SANS ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor.getExecQuery() + " ms \n");
+							printTerminal.append("Temps de récupération et de création des requêtes " + (end2-start2) + " ms \n");
+							printTerminal.append("Temps d'exécution des des requêtes " + processor.getExecQuery() + " ms \n"); 
+							printTerminal.append(" \n (sans prise en compte de la création du dictionnaire et des index) ");
+							System.out.println(printTerminal.toString());
 							System.out.println("Fin de l'option \n");
 							break;
 						case 7 : 
 							System.out.println(" Création du dictionnaire et de l'index en cours..");
 							parseData();
 							System.out.println("Requête(s) en cours");
-							ArrayList<Query> queries2 = parseQueries();
-							Processor processor2 = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries2);
-							processor2.writeAnswers(outputPath);
-							System.out.println("Temps de création et d'exécution des requêtes (AVEC ECRITURE et \n sans prise en compte de la création du dictionnaire et des index " + processor2.getExecQueryWrite() + " ms \n");
+							start2 = System.currentTimeMillis();
+							queries = parseQueries();
+							end2 = System.currentTimeMillis();
+							processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
+							processor.writeAnswers(outputPath);
+							printTerminal.append("Temps de récupération et de création des requêtes " + (end2-start2) + " ms \n");
+							printTerminal.append("Temps d'exécution des des requêtes " + processor.getExecQuery() + " ms \n"); 
+							printTerminal.append(" \n (sans prise en compte de la création du dictionnaire et des index) ");
+							System.out.println(printTerminal.toString());
 							System.out.println("Fin de l'option \n");
 							break;
 						case 8 : 
-							StringBuilder allToSee = new StringBuilder();
-							double startAll = System.currentTimeMillis();
+							start = System.currentTimeMillis();
 							System.out.println(" Création du dictionnaire et de l'index en cours..");
 							parseData();
 							System.out.println("Requête(s) en cours");
-							ArrayList<Query> queriesAll = parseQueries();
-							Processor processorAll = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesAll);
-							processorAll.doQueries();
-							double endAll = System.currentTimeMillis();
-							allToSee.append("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " ms \n");
-							allToSee.append("Temps de création des index (SANS ECRITURE) " + IndexOpti.getExecIndex() + " ms \n");
-							allToSee.append("Temps de création et d'exécution des requêtes (SANS ECRITURE) " + processorAll.getExecQuery() + " ms \n");
-							double totalTime = (endAll - startAll);
+							start2 = System.currentTimeMillis();
+							queries = parseQueries();
+							end2 = System.currentTimeMillis();
+							processor = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
+							processor.doQueries();
+							end = System.currentTimeMillis();
+							printTerminal.append("Temps de création du dictionnaire (SANS ECRITURE) " + DictionaryHashMap.getTimeDictionnary() + " ms \n");
+							printTerminal.append("Temps de création des index (SANS ECRITURE) " + IndexOpti.getExecIndex() + " ms \n");
+							printTerminal.append("Temps de récupération et de création des requêtes (SANS ECRITURE) " + (end2-start2) + " ms \n");
+							printTerminal.append("Temps d'exécution des des requêtes (SANS ECRITURE) " + processor.getExecQuery() + " ms \n"); 
+							double totalTime = (end - start);
 							
-							allToSee.append("Temps d'exécution total de l'application : " + totalTime + " ms");				
-							System.out.println(allToSee.toString());
+							printTerminal.append("Temps d'exécution total de l'application : " + totalTime + " ms");				
+							System.out.println(printTerminal.toString());
 							System.out.println("Fin de l'option \n");
 							break;
 						case 9 : 
-							double startWrite = System.currentTimeMillis();
+							start = System.currentTimeMillis();
 							csv = new ArrayList<String>();
 							System.out.println(" Création du dictionnaire et de l'index en cours..");
 							parseData();
 							System.out.println("Requête(s) en cours");
-							startq = System.currentTimeMillis();
-							ArrayList<Query> queriesWrite = parseQueries();
-							endq = System.currentTimeMillis();
-							Processor processorWrite = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queriesWrite);
+							start2 = System.currentTimeMillis();
+							queries= parseQueries();
+							end2 = System.currentTimeMillis();
+							Processor processorWrite = new Processor(MainRDFHandler.dictionary,MainRDFHandler.indexesToArray(), queries);
 							processorWrite.doQueries();				
-							double endWrite = System.currentTimeMillis();
-							double totalTimeWrite = (endWrite - startWrite);
+							end = System.currentTimeMillis();
+							double totalTimeWrite = (end - start);
 							System.out.println("Écritures des données Dictionnaire, Index et Query..");
 							
 							MainRDFHandler.writeDictionnary();
@@ -563,15 +550,15 @@ final class Main {
 							csv.add(dataFile);
 							csv.add(queryFile);
 							csv.add(String.valueOf(MainRDFHandler.nbTriplet));
-							csv.add(String.valueOf(queriesWrite.size()));
+							csv.add(String.valueOf(queries.size()));
 							csv.add("NON_DISPONIBLE");
-							csv.add(String.valueOf(endq - startq));
+							csv.add(String.valueOf(end2 - start2));
 							csv.add(String.valueOf(DictionaryHashMap.getTimeDictionnary()));
 							csv.add("6");
 							csv.add(String.valueOf(IndexOpti.getExecIndex()));
 							csv.add(String.valueOf(totalTimeWrite));
-							double endWrite2 = System.currentTimeMillis();
-							totalTimeCSV = (endWrite2 - startWrite);
+							end3 = System.currentTimeMillis();
+							totalTimeCSV = (end3 - start);
 							csv.add(String.valueOf(totalTimeCSV));
 							fileName = "option_8_data_output_"+System.currentTimeMillis();
 							MainRDFHandler.writeToCSV(csv, fileName);
