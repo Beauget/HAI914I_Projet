@@ -1,4 +1,4 @@
-RAM	[512-1024]	 [1024-1536]	[1536-2048]
-TempsDeCréationDuDictionnaire	574	560	553
-TempsDeChargementDesRequetes	454	402	406
+RAM,[512-1024],[1024-1536],[1536-2048]
+Temps de création du dictionnaire,574,560,553
+Temps de chargement des requêtes,454,402,406
 
