@@ -1,2 +1,2 @@
 RAM,[512-1024],[1024-1536],[1536-2048]
-Comparaison des performances suivant la quantité de RAM alloué : création des index,1481,1428,1464
+Comparaison des performances suivant la quantité de RAM alloué : création des index 500K,1481,1428,1464

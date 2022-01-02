@@ -1,0 +1,2 @@
+RAM,[512-1024],[1024-1536],[1536-2048]
+Comparaison des performances suivant la quantité de RAM alloué : exécution de 15000 requêtes,629904,664082,685981
